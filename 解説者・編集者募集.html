@@ -1,0 +1,716 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>解説・編集者募集｜高専から編入せよ！</title>
+   <link rel="icon" href="favicon.png" sizes="512x512">
+<link rel="shortcut icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      color-scheme: dark;
+    }
+
+    body {
+      margin: 0;
+      background: #020617;
+      color: #e5e7eb;
+    }
+
+    a {
+      color: #38bdf8;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* ヘッダー & タブ（ホームと合わせる） */
+    header {
+      padding: 0.6rem 1.5rem 0.3rem;
+      border-bottom: 1px solid #1f2937;
+      background: #020617aa;
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .header-inner {
+      max-width: 980px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .logo {
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      color: #38bdf8;
+      white-space: nowrap;
+    }
+
+    .beta-label {
+      font-size: 0.75rem;
+      color: #9ca3af;
+      white-space: nowrap;
+    }
+
+    .nav {
+      margin-top: 0.1rem;
+      overflow-x: auto;
+    }
+
+    .nav-tabs {
+      display: inline-flex;
+      gap: 0.4rem;
+      padding: 0.25rem 0;
+      list-style: none;
+      margin: 0;
+    }
+
+    .nav-tab {
+      font-size: 0.8rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      color: #9ca3af;
+      cursor: pointer;
+      white-space: nowrap;
+      background: transparent;
+      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+      display: inline-block;
+      text-decoration: none;
+    }
+
+    .nav-tab:hover {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: #1f2937;
+      color: #e5e7eb;
+      text-decoration: none;
+    }
+
+    .nav-tab.active {
+      background: radial-gradient(circle at top left, #0ea5e9, #38bdf8);
+      color: #0b1120;
+      border-color: transparent;
+      font-weight: 600;
+    }
+
+    @media (min-width: 720px) {
+      .header-inner {
+        flex-direction: column;
+      }
+      .header-top {
+        flex-direction: row;
+      }
+    }
+
+    /* ページ本体 */
+
+    main {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 3rem;
+    }
+
+    .breadcrumb {
+      font-size: 0.75rem;
+      color: #6b7280;
+      margin-bottom: 1.2rem;
+    }
+
+    .breadcrumb span.sep {
+      margin: 0 0.25rem;
+    }
+
+    .page-title {
+      margin-bottom: 1.5rem;
+    }
+
+    .page-title h1 {
+      font-size: clamp(1.6rem, 3vw, 2rem);
+      margin: 0 0 0.4rem;
+      letter-spacing: 0.04em;
+    }
+
+    .page-title p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: #9ca3af;
+      line-height: 1.7;
+    }
+
+    /* Discord セクション（カード） */
+
+    .discord-card {
+      border-radius: 1.25rem;
+      border: 1px solid #1f2937;
+      background: radial-gradient(circle at top left, #0f172a, #020617);
+      padding: 1.5rem 1.25rem;
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2.4fr);
+      gap: 1.5rem;
+      align-items: center;
+      margin-bottom: 2.5rem;
+    }
+
+    @media (max-width: 720px) {
+      .discord-card {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .discord-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid #1f2937;
+      background: #020617;
+      font-size: 0.78rem;
+      color: #9ca3af;
+      margin-bottom: 0.55rem;
+    }
+
+    .discord-badge span.icon {
+      font-size: 1rem;
+    }
+
+    .discord-text h2 {
+      font-size: 1.3rem;
+      margin: 0 0 0.5rem;
+    }
+
+    .discord-text p {
+      margin: 0 0 0.7rem;
+      font-size: 0.9rem;
+      color: #e5e7eb;
+    }
+
+    .discord-note {
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+
+    .discord-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.6rem 1.1rem;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      background: #5865f2;
+      color: white;
+      font-weight: 600;
+      font-size: 0.9rem;
+      box-shadow: 0 12px 35px rgba(15, 23, 42, 0.8);
+      margin-top: 0.3rem;
+      text-decoration: none;
+    }
+
+    .discord-button span.icon {
+      font-size: 1.2rem;
+    }
+
+    .discord-button:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+    }
+
+    .discord-button:active {
+      filter: brightness(0.95);
+      transform: translateY(0);
+    }
+
+    /* Discord内の会話イメージ（イラスト風） */
+
+    .discord-illu {
+      border-radius: 1rem;
+      padding: 1rem;
+      background:
+        radial-gradient(circle at top, rgba(56, 189, 248, 0.15), transparent 60%),
+        radial-gradient(circle at bottom right, rgba(129, 140, 248, 0.15), transparent 60%),
+        #020617;
+      border: 1px solid #1f2937;
+    }
+
+    .discord-illu-inner {
+      background: rgba(15, 23, 42, 0.95);
+      border-radius: 0.8rem;
+      padding: 0.9rem;
+    }
+
+    .bubble-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      font-size: 0.85rem;
+    }
+
+    .bubble {
+      padding: 0.45rem 0.7rem;
+      border-radius: 0.8rem;
+      background: #020617;
+      display: inline-flex;
+      align-items: flex-start;
+      gap: 0.4rem;
+      max-width: 100%;
+    }
+
+    .bubble.me {
+      margin-left: auto;
+      background: #1d4ed8;
+    }
+
+    .bubble span.avatar {
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .bubble span.text {
+      flex: 1;
+    }
+
+    .bubble small {
+      display: block;
+      font-size: 0.73rem;
+      opacity: 0.8;
+      margin-top: 0.15rem;
+    }
+
+    /* セクション見出し */
+
+    .section-heading {
+      margin: 2.3rem 0 1.3rem;
+    }
+
+    .section-heading h2 {
+      font-size: 1.2rem;
+      margin: 0 0 0.35rem;
+    }
+
+    .section-heading p {
+      margin: 0;
+      font-size: 0.88rem;
+      color: #9ca3af;
+      line-height: 1.7;
+    }
+
+    /* 参加の流れ */
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+
+    @media (max-width: 840px) {
+      .steps {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .step-card {
+      border-radius: 1rem;
+      border: 1px solid #1f2937;
+      background: radial-gradient(circle at top left, #111827, #020617);
+      padding: 0.9rem 0.95rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .step-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      color: #7dd3fc;
+      font-weight: 600;
+      margin-bottom: 0.1rem;
+    }
+
+    .step-label span.num {
+      width: 1.3rem;
+      height: 1.3rem;
+      border-radius: 999px;
+      border: 1px solid #38bdf8;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+    }
+
+    .step-card h3 {
+      font-size: 1rem;
+      margin: 0;
+    }
+
+    .step-card p {
+      font-size: 0.88rem;
+      margin: 0;
+      color: #d1d5db;
+    }
+
+    /* 活動イメージ（イラスト風カード） */
+
+    .activities {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.1rem;
+    }
+
+    @media (max-width: 960px) {
+      .activities {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .activities {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .activity-card {
+      border-radius: 1rem;
+      border: 1px solid #1f2937;
+      background:
+        radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 60%),
+        radial-gradient(circle at bottom right, rgba(129, 140, 248, 0.12), transparent 60%),
+        #020617;
+      padding: 0.95rem 1rem 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .activity-main {
+      position: relative;
+      z-index: 1;
+    }
+
+    .activity-icon {
+      font-size: 1.5rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .activity-card h3 {
+      font-size: 1rem;
+      margin: 0 0 0.1rem;
+    }
+
+    .activity-card p {
+      font-size: 0.88rem;
+      margin: 0;
+      color: #e5e7eb;
+    }
+
+    .activity-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      margin-top: 0.35rem;
+      padding: 0.18rem 0.55rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.85);
+      font-size: 0.75rem;
+      color: #7dd3fc;
+      border: 1px solid #1f2937;
+    }
+
+    .note-box {
+      margin-top: 2rem;
+      padding: 0.95rem 1rem;
+      border-radius: 0.9rem;
+      border: 1px solid #1f2937;
+      background: #111827;
+      font-size: 0.83rem;
+      color: #e5e7eb;
+      display: flex;
+      gap: 0.6rem;
+    }
+
+    .note-box span.icon {
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <div class="header-top">
+        <div class="logo">高専から編入せよ！</div>
+        <div class="beta-label">β / contributors prototype</div>
+      </div>
+      <nav class="nav">
+        <ul class="nav-tabs">
+          <li><a class="nav-tab" href="index.html">ホーム</a></li>
+          <li><a class="nav-tab" href="仕組み.html">プラットフォームの仕組み</a></li>
+          <li><a class="nav-tab" href="問題特訓.html">問題特訓</a></li>
+          <li><a class="nav-tab active" href="解説者・編集者募集.html">解説・編集者募集</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="breadcrumb">
+      <span>ホーム</span>
+      <span class="sep">›</span>
+      <span>解説・編集者募集</span>
+    </div>
+
+    <section class="page-title">
+      <h1>解説・編集者募集中</h1>
+      <p>
+        「高専から編入せよ！」の解説ページを、一緒に co-study しながら育ててくれる
+        仲間を募集しています。<br>
+        Discord コミュニティに参加して、問題の解説・編集・誤植チェックなど、
+        自分に合った関わり方で手伝ってください。
+      </p>
+    </section>
+
+    <!-- Discord 招待セクション -->
+    <section class="discord-card">
+      <div class="discord-text">
+        <div class="discord-badge">
+          <span class="icon">✨</span>
+          <span>解説者・編集者コミュニティ</span>
+        </div>
+        <h2>Discord に入って、一緒に解説をつくりませんか？</h2>
+        <p>
+          解説を書く人、文章を整える人、誤植を見つける人、
+          「1問だけ試しにやってみる人」まで、いろいろな参加スタイルを歓迎します。
+        </p>
+        <p>
+          まずは下のボタンからサーバーに参加してください。
+          すぐに自己紹介をしなくても、しばらく様子見してからで大丈夫です。
+        </p>
+        <a
+          class="discord-button"
+          href="https://discord.gg/your-invite-code"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span class="icon">💬</span>
+          <span>Discord コミュニティに参加する</span>
+        </a>
+        <p class="discord-note">
+          ※ Discord アカウントが必要です。実名参加・匿名参加は、各自のスタイルでOKです。
+        </p>
+      </div>
+
+      <!-- Discord 内の会話イメージ（イラスト枠） -->
+      <div class="discord-illu">
+        <div class="discord-illu-inner">
+          <div class="bubble-row">
+            <div class="bubble">
+              <span class="avatar">🧑‍💻</span>
+              <span class="text">
+                次のネットワークの問題、解説を書いてみたいです！
+                <small>@you · 今日 21:03</small>
+              </span>
+            </div>
+            <div class="bubble me">
+              <span class="avatar">📚</span>
+              <span class="text">
+                ありがとうございます！スレッド立てたので、ドラフト貼ってもらえたら一緒に直していきましょう〜
+                <small>@mod · 今日 21:05</small>
+              </span>
+            </div>
+            <div class="bubble">
+              <span class="avatar">📝</span>
+              <span class="text">
+                図のレイアウトは、ホワイトボード風に統一してみるのはどうでしょう？
+                <small>@editor · 今日 21:10</small>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 参加の流れ -->
+    <section>
+      <div class="section-heading">
+        <h2>参加の流れ</h2>
+        <p>
+          「ちょっと覗いてみる」「1問だけ関わってみる」くらいの軽さでOKです。
+          無理なく続けられるペースで参加してください。
+        </p>
+      </div>
+
+      <div class="steps">
+        <article class="step-card">
+          <div class="step-label">
+            <span class="num">1</span>
+            <span>Discord に参加</span>
+          </div>
+          <h3>まずはサーバーに入る</h3>
+          <p>
+            上の招待リンクからサーバーに参加します。
+            しばらくは読む専でも問題ありません。雰囲気に慣れるところから始めましょう。
+          </p>
+        </article>
+
+        <article class="step-card">
+          <div class="step-label">
+            <span class="num">2</span>
+            <span>ロールと担当を決める</span>
+          </div>
+          <h3>「解説」「編集」「チェック」など</h3>
+          <p>
+            自己紹介チャンネルで、できそうなこと・やってみたいことを簡単に教えてください。
+            解説ドラフトを書く人、文章を整える人、誤植チェックだけの人も歓迎です。
+          </p>
+        </article>
+
+        <article class="step-card">
+          <div class="step-label">
+            <span class="num">3</span>
+            <span>1 問からスタート</span>
+          </div>
+          <h3>小さく始めて、co-study で育てる</h3>
+          <p>
+            いきなりたくさん抱えなくて大丈夫です。
+            気になる問題を 1 問だけ選んで、ドラフトを書いたりコメントを付けたりしながら、
+            少しずつページを育てていきましょう。
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- 活動イメージ（イラスト風カード） -->
+    <section>
+      <div class="section-heading">
+        <h2>コミュニティ内での活動イメージ</h2>
+        <p>
+          オンラインのホワイトボードを囲んで、みんなで解説を練っていくようなイメージです。
+          ここでは、どんな役割で関われるのかをイラスト風カードで紹介します。
+        </p>
+      </div>
+
+      <div class="activities">
+        <article class="activity-card">
+          <div class="activity-main">
+            <div class="activity-icon">🧠✏️</div>
+            <h3>解説ドラフトを書く</h3>
+            <p>
+              「なぜそうなるのか」を自分の言葉で書き出す担当です。
+              ホワイトボードに書くように、Markdown でステップごとに説明を組み立てていきます。
+            </p>
+            <div class="activity-tag">
+              <span>Markdown 解説ボード</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="activity-card">
+          <div class="activity-main">
+            <div class="activity-icon">🖼️📊</div>
+            <h3>図・イラストを考える</h3>
+            <p>
+              ネットワーク図やベン図など、「ここに 1 枚イラストがあると分かりやすい」
+              というポイントを一緒に考えます。ラフな手書き案からのスタートでも構いません。
+            </p>
+            <div class="activity-tag">
+              <span>ホワイトボード風イラスト</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="activity-card">
+          <div class="activity-main">
+            <div class="activity-icon">🔍📝</div>
+            <h3>推敲・誤植チェック</h3>
+            <p>
+              書かれた解説を読みながら、「ここ、もう少し丁寧に」「ここ日本語が変かも」
+              といったコメントを付けていく役割です。国語力・読解力が光ります。
+            </p>
+            <div class="activity-tag">
+              <span>コメントで赤入れ</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="activity-card">
+          <div class="activity-main">
+            <div class="activity-icon">🤝📚</div>
+            <h3>もくもく会・勉強会</h3>
+            <p>
+              定期的にもくもく会や、特定分野（ネットワーク・アルゴリズムなど）を
+              テーマにした小さな勉強会を開いていく予定です。参加・見学だけでもOKです。
+            </p>
+            <div class="activity-tag">
+              <span>co-study セッション</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="activity-card">
+          <div class="activity-main">
+            <div class="activity-icon">🧑‍🏫👩‍🎓</div>
+            <h3>後輩・他高専への還元</h3>
+            <p>
+              作った解説は、未来の編入志望の高専生の財産になります。
+              「自分が苦労した問題を、次の世代は少しだけ楽に解けるようにする」
+              そんなバトンリレーを一緒に作っていきます。
+            </p>
+            <div class="activity-tag">
+              <span>未来の受験生へバトン</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="activity-card">
+          <div class="activity-main">
+            <div class="activity-icon">🌱💡</div>
+            <h3>企画・運営のアイデア出し</h3>
+            <p>
+              サイトの新機能、イベント企画、教科の拡張など、
+              「高専から編入せよ！」そのものをどんなプラットフォームにしていくか
+              一緒に考える役割です。
+            </p>
+            <div class="activity-tag">
+              <span>プロジェクトデザイン</span>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="note-box">
+        <span class="icon">💡</span>
+        <div>
+          <strong>イラストについて</strong><br>
+          上のカードはあくまでイメージです。実際のページでは、手書き風の図や
+          アイコン画像などに差し替えてもOKです。デザインに興味がある方は、
+          「イラスト / 図案班」としての参加も大歓迎です。
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

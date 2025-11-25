@@ -1,0 +1,760 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>プラットフォームの仕組み｜高専から編入せよ！</title>
+   <link rel="icon" href="favicon.png" sizes="512x512">
+<link rel="shortcut icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      color-scheme: dark;
+    }
+
+    body {
+      margin: 0;
+      background: #020617;
+      color: #e5e7eb;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    header {
+      padding: 0.6rem 1.5rem 0.3rem;
+      border-bottom: 1px solid #1f2937;
+      background: #020617aa;
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .header-inner {
+      max-width: 980px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .logo {
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      color: #38bdf8;
+      white-space: nowrap;
+    }
+
+    .beta-label {
+      font-size: 0.75rem;
+      color: #9ca3af;
+      white-space: nowrap;
+    }
+
+    /* タブナビ */
+    .nav {
+      margin-top: 0.1rem;
+      overflow-x: auto;
+    }
+
+    .nav-tabs {
+      display: inline-flex;
+      gap: 0.4rem;
+      padding: 0.25rem 0;
+      list-style: none;
+      margin: 0;
+    }
+
+    .nav-tab {
+      font-size: 0.8rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      color: #9ca3af;
+      cursor: pointer;
+      white-space: nowrap;
+      background: transparent;
+      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .nav-tab:hover {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: #1f2937;
+      color: #e5e7eb;
+    }
+
+    .nav-tab.active {
+      background: radial-gradient(circle at top left, #0ea5e9, #38bdf8);
+      color: #0b1120;
+      border-color: transparent;
+      font-weight: 600;
+    }
+
+    @media (min-width: 720px) {
+      .header-inner {
+        flex-direction: column;
+      }
+      .header-top {
+        flex-direction: row;
+      }
+    }
+
+    /* ヒーロー */
+    .hero {
+      position: relative;
+      padding: 4rem 1.5rem 3rem;
+      max-width: 980px;
+      margin: 0 auto;
+      overflow: hidden;
+      border-bottom: 1px solid #1f2937;
+      border-radius: 0 0 1.5rem 1.5rem;
+      isolation: isolate;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(135deg, rgba(15,23,42,0.9), rgba(8,47,73,0.8)),
+        url("https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1400&q=80");
+      background-size: cover;
+      background-position: center;
+      opacity: 0.95;
+      z-index: -1;
+      transform: scale(1.02);
+    }
+
+    .hero-inner {
+      text-align: center;
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    .hero-kicker {
+      font-size: 0.8rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #7dd3fc;
+      margin-bottom: 0.6rem;
+    }
+
+    .hero-title {
+      font-size: clamp(1.9rem, 4vw, 2.4rem);
+      font-weight: 800;
+      margin-bottom: 0.6rem;
+    }
+
+    .hero-sub {
+      color: #e5e7eb;
+      font-size: 0.95rem;
+      line-height: 1.8;
+      opacity: 0.9;
+    }
+
+    /* 全体ラッパー */
+    .page {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+
+    .section {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 1.75rem;
+      align-items: center;
+    }
+
+    .section.reverse {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+    }
+
+    @media (max-width: 768px) {
+      .section,
+      .section.reverse {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-body {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: #e5e7eb;
+    }
+
+    .section-body p {
+      margin: 0.3rem 0;
+    }
+
+    .section-body strong {
+      color: #7dd3fc;
+      font-weight: 600;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.75rem;
+      padding: 0.15rem 0.55rem;
+      border-radius: 999px;
+      border: 1px solid #1f2937;
+      background: rgba(15,23,42,0.85);
+      color: #9ca3af;
+      margin-bottom: 0.2rem;
+    }
+
+    .pill span {
+      font-size: 0.9em;
+    }
+
+    /* 図・イラストエリア */
+    .figure-card {
+      border-radius: 1.25rem;
+      border: 1px solid #1f2937;
+      background: radial-gradient(circle at top left, #1f2937, #020617);
+      padding: 1.1rem 1.1rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .figure-title {
+      font-size: 0.85rem;
+      color: #9ca3af;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .figure-diagram {
+      border-radius: 0.9rem;
+      background: radial-gradient(circle at top left, #0f172a, #020617);
+      padding: 0.9rem;
+      font-size: 0.8rem;
+      display: grid;
+      gap: 0.4rem;
+    }
+
+    .flow {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+
+    .flow-step {
+      flex: 1;
+      min-width: 150px;
+      padding: 0.45rem 0.6rem;
+      border-radius: 0.75rem;
+      border: 1px solid #1f2937;
+      background: rgba(15,23,42,0.9);
+    }
+
+    .flow-step-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #9ca3af;
+      margin-bottom: 0.15rem;
+    }
+
+    .flow-step-main {
+      font-size: 0.8rem;
+    }
+
+    .flow-arrow {
+      font-size: 1.1rem;
+      padding: 0 0.3rem;
+      color: #64748b;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+
+    .chip {
+      font-size: 0.7rem;
+      padding: 0.15rem 0.45rem;
+      border-radius: 999px;
+      border: 1px solid #1f2937;
+      background: rgba(15,23,42,0.9);
+      color: #9ca3af;
+    }
+
+    /* カードグリッド */
+    .card-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1rem;
+      margin-top: 0.8rem;
+    }
+
+    @media (min-width: 720px) {
+      .card-grid.two {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .card-grid.three {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    .card {
+      border-radius: 1rem;
+      border: 1px solid #1f2937;
+      background: radial-gradient(circle at top left, #0f172a, #020617);
+      padding: 0.9rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      font-size: 0.9rem;
+    }
+
+    .card-label {
+      font-size: 0.75rem;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .card-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .card-body {
+      font-size: 0.85rem;
+      color: #d1d5db;
+      line-height: 1.7;
+    }
+
+    .card-body ul {
+      margin: 0.25rem 0 0 1.1rem;
+      padding: 0;
+    }
+
+    .card-body li {
+      margin: 0.1rem 0;
+    }
+
+    /* コミュニティ図 */
+    .network-diagram {
+      border-radius: 0.9rem;
+      background: radial-gradient(circle at top left, #0b1120, #020617);
+      padding: 0.8rem;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.6rem;
+      font-size: 0.8rem;
+    }
+
+    .network-main {
+      border-radius: 0.8rem;
+      border: 1px dashed #1f2937;
+      padding: 0.7rem;
+      text-align: center;
+    }
+
+    .network-main-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .network-main-sub {
+      font-size: 0.75rem;
+      color: #9ca3af;
+    }
+
+    .network-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      justify-content: center;
+    }
+
+    .network-link {
+      border-radius: 999px;
+      border: 1px solid #1f2937;
+      padding: 0.25rem 0.6rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: rgba(15,23,42,0.9);
+      color: #cbd5f5;
+    }
+
+    .network-link span {
+      font-size: 0.75rem;
+    }
+
+    /* CTA */
+    .cta {
+      margin-top: 0.5rem;
+      padding: 1.2rem 1.1rem;
+      border-radius: 1rem;
+      border: 1px solid #1f2937;
+      background: radial-gradient(circle at top left, #0f172a, #020617);
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      font-size: 0.9rem;
+    }
+
+    .cta-title {
+      font-weight: 600;
+    }
+
+    .cta-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.3rem;
+    }
+
+    .cta-button {
+      border-radius: 999px;
+      padding: 0.35rem 0.9rem;
+      font-size: 0.8rem;
+      border: 1px solid #38bdf8;
+      background: radial-gradient(circle at top left, #0ea5e9, #38bdf8);
+      color: #0b1120;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .cta-ghost {
+      border-radius: 999px;
+      padding: 0.35rem 0.8rem;
+      font-size: 0.8rem;
+      border: 1px solid #1f2937;
+      background: rgba(15,23,42,0.9);
+      color: #e5e7eb;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <div class="header-top">
+        <div class="logo">高専から編入せよ！</div>
+        <div class="beta-label">β / mechanism overview</div>
+      </div>
+      <nav class="nav">
+  <ul class="nav-tabs">
+    <li><a class="nav-tab" href="index.html">ホーム</a></li>
+    <li><a class="nav-tab active" href="仕組み.html">プラットフォームの仕組み</a></li>
+    <li><a class="nav-tab" href="問題特訓.html">問題特訓</a></li>
+    <li><a class="nav-tab" href="解説者・編集者募集.html">解説・編集者募集</a></li>
+  </ul>
+</nav>
+
+    </div>
+  </header>
+
+  <!-- ヒーロー -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-kicker">how “せよ！” works</div>
+      <h1 class="hero-title">「せよ！」のしくみと、co-studyの流れ</h1>
+      <p class="hero-sub">
+        「高専から編入せよ！（せよ！）」は、<br>
+        <strong>AI がつくるオリジナル問題</strong> と、<strong>高専生による解説・編集</strong> を組み合わせた、<br>
+        編入対策のための co-study プラットフォームです。
+      </p>
+    </div>
+  </section>
+
+  <main class="page">
+    <!-- セクション1：全体の流れ -->
+    <section class="section">
+      <div>
+        <div class="pill"><span>01</span> せよ！の基本サイクル</div>
+        <h2 class="section-title">AI問題 × 自己採点 × 高専生の解説</h2>
+        <div class="section-body">
+          <p>
+            せよ！では、<strong>AI が作成したオリジナルの編入対策問題</strong> をベースに学習を進めます。
+          </p>
+          <p>
+            <strong>「問題特訓」ページ</strong>では、これらの問題を次々と出題。<br>
+            答えはページ内に掲載されているので、<strong>採点は自己採点</strong>でOKです。
+          </p>
+          <p>
+            さらに、<strong>「解説付き問題」ページ</strong>では、<br>
+            解説者が丁寧に書いた解説を読みながら、解き方の「なぜ？」まで掘り下げられます。
+          </p>
+        </div>
+      </div>
+      <aside class="figure-card" aria-label="学習フローの図">
+        <div class="figure-title">せよ！の学習フロー（イメージ図）</div>
+        <div class="figure-diagram">
+          <div class="flow">
+            <div class="flow-step">
+              <div class="flow-step-label">step 1</div>
+              <div class="flow-step-main">
+                🤖 AIがオリジナル問題を生成<br>
+                編入レベルに合わせた数学・英語・情報など。
+              </div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+              <div class="flow-step-label">step 2</div>
+              <div class="flow-step-main">
+                📝 「問題特訓」で演習<br>
+                解いてみて、自分で答えと照らし合わせて自己採点。
+              </div>
+            </div>
+          </div>
+          <div class="flow">
+            <div class="flow-arrow">↓</div>
+            <div class="flow-step">
+              <div class="flow-step-label">step 3</div>
+              <div class="flow-step-main">
+                📚 「解説付き問題」で復習<br>
+                高専生が書いた解説を読み、考え方と別解まで確認。
+              </div>
+            </div>
+          </div>
+          <div class="chip-row">
+            <span class="chip">AI生成問題</span>
+            <span class="chip">自己採点スタイル</span>
+            <span class="chip">高専生目線の解説</span>
+            <span class="chip">co-studyでブラッシュアップ</span>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- セクション2：ページごとの役割 -->
+    <section class="section reverse">
+      <div>
+        <div class="pill"><span>02</span> ページごとの役割</div>
+        <h2 class="section-title">「問題特訓」と「解説付き問題」の違い</h2>
+        <div class="section-body">
+          <p>せよ！には、大きく分けてふたつの問題ページがあります。</p>
+        </div>
+
+        <div class="card-grid two">
+          <article class="card">
+            <div class="card-label">practice</div>
+            <div class="card-title">問題特訓ページ</div>
+            <div class="card-body">
+              <ul>
+                <li>AIが作成したオリジナル編入対策問題を出題</li>
+                <li>答えは同じページで確認でき、<strong>採点は自己採点</strong></li>
+                <li>まずは<strong>量をこなすこと</strong>にフォーカスしたモード</li>
+                <li>間違えた問題や気になる問題は、「解説付き問題」でじっくり復習</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-label">deep dive</div>
+            <div class="card-title">解説付き問題ページ</div>
+            <div class="card-body">
+              <ul>
+                <li>解説者が作成した<strong>文章解説</strong>を読むことができる</li>
+                <li>どこでつまずきやすいか・別解・注意点なども盛り込み</li>
+                <li>「なぜその式変形をしているのか？」まで丁寧に説明</li>
+                <li>自分の解答と比較して、「思考の差分」を見つける場所</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <aside class="figure-card" aria-label="ページ構成の図">
+        <div class="figure-title">イメージイラスト</div>
+        <div class="figure-diagram">
+          <div class="flow">
+            <div class="flow-step">
+              <div class="flow-step-label">練習ゾーン</div>
+              <div class="flow-step-main">
+                ▢ ▢ ▢ ▢ ▢<br>
+                「問題特訓」でテンポよく解いていく。
+              </div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+              <div class="flow-step-label">理解ゾーン</div>
+              <div class="flow-step-main">
+                🧠＋📖<br>
+                「解説付き問題」で、考え方の筋トレ。
+              </div>
+            </div>
+          </div>
+          <p style="font-size:0.75rem;color:#9ca3af;margin:0.4rem 0 0;">
+            ※ 実際の画面では、これらのモードをページ切り替えやタブで行き来するイメージです。
+          </p>
+        </div>
+      </aside>
+    </section>
+
+    <!-- セクション3：解説者・編集者とco-study -->
+    <section class="section">
+      <div>
+        <div class="pill"><span>03</span> co-study（コスタディ）とは</div>
+        <h2 class="section-title">高専生が書き、高専生がレビューする解説</h2>
+        <div class="section-body">
+          <p>
+            「解説付き問題」の解説は、<strong>解説者が自分の言葉で書いています</strong>。<br>
+            解説者の多くは<strong>現役高専生</strong>で、自分たちが欲しかった解説を目指しています。
+          </p>
+          <p>
+            さらに、ひとつの解説に対して<strong>最低2人以上の共同編集者</strong>がチェックを行い、<br>
+            わかりにくい部分や不足している部分を修正していきます。
+          </p>
+          <p>
+            この「解説者・編集者」の集団を、せよ！では<strong>「co-study（コスタディ）」</strong>と呼び、<br>
+            Discord や GitHub 上でコミュニティを形成しています。
+          </p>
+        </div>
+
+        <div class="card-grid three">
+          <article class="card">
+            <div class="card-label">role</div>
+            <div class="card-title">解説者</div>
+            <div class="card-body">
+              <ul>
+                <li>問題の解き方・考え方を文章で書く人</li>
+                <li>ほとんどが現役高専生</li>
+                <li>「自分ならこう説明してほしい」を形にしていく役割</li>
+              </ul>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-label">role</div>
+            <div class="card-title">共同編集者</div>
+            <div class="card-body">
+              <ul>
+                <li>解説を読み、最低2人以上で内容をチェック</li>
+                <li>わかりにくい部分や抜けている部分を指摘・修正</li>
+                <li>解説の統一感や質を守る役割</li>
+              </ul>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-label">culture</div>
+            <div class="card-title">co-study文化</div>
+            <div class="card-body">
+              <ul>
+                <li>Discord で日々の相談や作業の共有</li>
+                <li>GitHub で解説の差分管理やレビュー</li>
+                <li>「一緒に編集すること」自体を学びに変える文化</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <aside class="figure-card" aria-label="co-studyの図解">
+        <div class="figure-title">co-study のレビューの流れ</div>
+        <div class="network-diagram">
+          <div class="network-main">
+            <div class="network-main-title">1つの問題の解説</div>
+            <div class="network-main-sub">中心に「解説」があり、その周りを複数の目が囲むイメージ</div>
+          </div>
+          <div class="network-links">
+            <div class="network-link">
+              👤<span>解説者が初稿を書く</span>
+            </div>
+            <div class="network-link">
+              👥<span>共同編集者Aがレビュー</span>
+            </div>
+            <div class="network-link">
+              👥<span>共同編集者Bがレビュー</span>
+            </div>
+            <div class="network-link">
+              🔁<span>Discordで議論しつつ修正</span>
+            </div>
+            <div class="network-link">
+              ✅<span>OKになったら「解説付き問題」として公開</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- セクション4：質問・コミュニティ -->
+    <section>
+      <div class="pill"><span>04</span> つながりの場</div>
+      <h2 class="section-title">Discord・GitHub・オープンチャットで「質問できる」場所を</h2>
+      <div class="section-body">
+        <p>
+          せよ！は、ページを眺めるだけのサイトではありません。<br>
+          <strong>分からなかったら、すぐに誰かに聞ける場所</strong>をいくつか用意しています。
+        </p>
+      </div>
+
+      <div class="card-grid two">
+        <article class="card">
+          <div class="card-label">community</div>
+          <div class="card-title">co-study コミュニティ</div>
+          <div class="card-body">
+            <ul>
+              <li>Discord：日々の質問・雑談・作業報告</li>
+              <li>GitHub：解説の管理・レビュー・issueベースの相談</li>
+              <li>「解説者・編集者として参加したい」人向けの場</li>
+            </ul>
+          </div>
+        </article>
+        <article class="card">
+          <div class="card-label">open chat</div>
+          <div class="card-title>「高専から編入せよ！」オープンチャット</div>
+          <div class="card-body">
+            <ul>
+              <li>編入に関する質問や、不安なことをカジュアルに相談できる</li>
+              <li>勉強の進捗を報告したり、同じ志望校の仲間を見つけたり</li>
+              <li>まずは「見る専」でもOK。雰囲気を感じるところから。</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+
+      <div class="cta">
+        <div class="cta-title">まずは「問題特訓」から、1問だけ解いてみませんか？</div>
+        <div>
+          ページの仕組みを知ったら、あとは実際に手を動かしてみるだけです。<br>
+          分からなかったら、co-study やオープンチャットで一緒に考えましょう。
+        </div>
+        <div class="cta-actions">
+          <button class="cta-button" type="button">
+            問題特訓ページへ（予定）
+          </button>
+          <button class="cta-ghost" type="button">
+            解説・編集者として関わってみたい
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,860 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>解説｜高専から編入せよ！</title>
+   <link rel="icon" href="favicon.png" sizes="512x512">
+<link rel="shortcut icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      color-scheme: dark;
+    }
+
+    body {
+      margin: 0;
+      background: #020617;
+      color: #e5e7eb;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    header {
+      padding: 0.6rem 1.5rem 0.3rem;
+      border-bottom: 1px solid #1f2937;
+      background: #020617aa;
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .header-inner {
+      max-width: 980px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .logo {
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      color: #38bdf8;
+      white-space: nowrap;
+    }
+
+    .beta-label {
+      font-size: 0.75rem;
+      color: #9ca3af;
+      white-space: nowrap;
+    }
+
+    .nav {
+      margin-top: 0.1rem;
+      overflow-x: auto;
+    }
+
+    .nav-tabs {
+      display: inline-flex;
+      gap: 0.4rem;
+      padding: 0.25rem 0;
+      list-style: none;
+      margin: 0;
+    }
+
+    .nav-tab {
+      font-size: 0.8rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      color: #9ca3af;
+      white-space: nowrap;
+      background: transparent;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .nav-tab:hover {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: #1f2937;
+      color: #e5e7eb;
+    }
+
+    @media (min-width: 720px) {
+      .header-inner {
+        flex-direction: column;
+      }
+      .header-top {
+        flex-direction: row;
+      }
+    }
+
+    /* ページ本体 */
+    .page {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 1.8rem 1.5rem 3rem;
+    }
+
+    /* パンくず */
+    .breadcrumb {
+      font-size: 0.8rem;
+      color: #9ca3af;
+      margin-bottom: 1.1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem;
+      align-items: center;
+    }
+
+    .breadcrumb a {
+      color: #9ca3af;
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      text-decoration: underline;
+    }
+
+    .breadcrumb-current {
+      color: #e5e7eb;
+    }
+
+    .breadcrumb-sep {
+      opacity: 0.6;
+    }
+
+    /* ホワイトボード風コンテナ */
+    .whiteboard {
+      border-radius: 1.6rem;
+      padding: 1.4rem 1.4rem 1.6rem;
+      background:
+        radial-gradient(circle at top left, rgba(252,252,252,0.95), rgba(243,244,246,0.98));
+      box-shadow:
+        0 18px 40px rgba(15,23,42,0.7),
+        0 0 0 1px rgba(148,163,184,0.15);
+      color: #111827;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .whiteboard::before {
+      content: "";
+      position: absolute;
+      inset: -20%;
+      background-image: linear-gradient(
+        rgba(148,163,184,0.06) 1px,
+        transparent 1px
+      );
+      background-size: 100% 22px;
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    .whiteboard-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .wb-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.9rem;
+    }
+
+    .wb-title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .wb-problem-id {
+      font-size: 0.75rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #6b7280;
+    }
+
+    .wb-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .wb-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      font-size: 0.8rem;
+      color: #4b5563;
+      align-items: flex-end;
+    }
+
+    .wb-names {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .wb-name-pill {
+      padding: 0.15rem 0.6rem;
+      border-radius: 999px;
+      background: #e5e7eb;
+      border: 1px solid #d1d5db;
+      font-size: 0.75rem;
+      color: #374151;
+    }
+
+    /* タグ & ハート */
+    .wb-tags-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      font-size: 0.75rem;
+    }
+
+    .tag {
+      padding: 0.15rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      color: #4b5563;
+    }
+
+    .tag-main {
+      border-color: #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+
+    .heart-button {
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      background: #fef2f2;
+      color: #b91c1c;
+      padding: 0.25rem 0.75rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    .heart-button span.heart {
+      font-size: 1rem;
+    }
+
+    /* 問題画像 */
+    .wb-image-wrap {
+      border-radius: 1rem;
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
+      padding: 0.6rem;
+      margin-bottom: 1rem;
+    }
+
+    .wb-image-inner {
+      border-radius: 0.75rem;
+      overflow: hidden;
+      background: #e5e7eb;
+    }
+
+    .wb-image-inner img {
+      width: 100%;
+      display: block;
+      object-fit: cover;
+      max-height: 260px;
+    }
+
+    .wb-image-caption {
+      font-size: 0.75rem;
+      color: #6b7280;
+      margin-top: 0.35rem;
+    }
+
+    /* 問題のねらい（折りたたみ） */
+    .wb-aim {
+      margin-bottom: 1rem;
+    }
+
+    .aim-toggle {
+      border-radius: 0.75rem;
+      border: 1px solid #e5e7eb;
+      background: #f3f4f6;
+      padding: 0.4rem 0.6rem;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      color: #374151;
+    }
+
+    .aim-toggle-label {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .aim-toggle-label span.icon {
+      font-size: 0.9rem;
+    }
+
+    .aim-body {
+      margin-top: 0.4rem;
+      border-radius: 0.75rem;
+      border: 1px dashed #e5e7eb;
+      background: #f9fafb;
+      padding: 0.6rem 0.7rem;
+      font-size: 0.85rem;
+      line-height: 1.7;
+      display: none;
+    }
+
+    /* 解説（Markdown風） */
+    .wb-section-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 0.35rem;
+    }
+
+    .wb-markdown {
+      font-size: 0.9rem;
+      line-height: 1.8;
+      color: #111827;
+    }
+
+    .wb-markdown h2 {
+      font-size: 1rem;
+      margin: 0.6rem 0 0.2rem;
+    }
+
+    .wb-markdown h3 {
+      font-size: 0.95rem;
+      margin: 0.5rem 0 0.15rem;
+    }
+
+    .wb-markdown p {
+      margin: 0.25rem 0;
+    }
+
+    .wb-markdown ul {
+      margin: 0.2rem 0 0.2rem 1.2rem;
+      padding: 0;
+    }
+
+    .wb-markdown li {
+      margin: 0.1rem 0;
+    }
+
+    .wb-markdown code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+        "Liberation Mono", "Courier New", monospace;
+      font-size: 0.85em;
+      background: #e5e7eb;
+      padding: 0.05rem 0.25rem;
+      border-radius: 0.25rem;
+    }
+
+    .wb-markdown pre {
+      margin: 0.4rem 0;
+      padding: 0.6rem 0.7rem;
+      background: #111827;
+      color: #f9fafb;
+      border-radius: 0.5rem;
+      overflow-x: auto;
+      font-size: 0.85em;
+    }
+
+    .wb-markdown pre code {
+      background: transparent;
+      padding: 0;
+      border-radius: 0;
+      color: inherit;
+    }
+
+    .wb-markdown hr {
+      border: none;
+      border-top: 1px dashed #e5e7eb;
+      margin: 0.6rem 0;
+    }
+
+    .wb-markdown blockquote {
+      margin: 0.3rem 0;
+      border-left: 3px solid #e5e7eb;
+      padding-left: 0.6rem;
+      color: #4b5563;
+      font-size: 0.9em;
+    }
+
+    @media (max-width: 640px) {
+      .whiteboard {
+        padding: 1.1rem 1.1rem 1.3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <div class="header-top">
+        <div class="logo">高専から編入せよ！</div>
+        <div class="beta-label">β / solution board</div>
+      </div>
+      <nav class="nav">
+        <ul class="nav-tabs">
+          <li><a class="nav-tab" href="index.html">ホーム</a></li>
+          <li><a class="nav-tab" href="仕組み.html">プラットフォームの仕組み</a></li>
+          <li><a class="nav-tab" href="問題特訓.html">問題特訓</a></li>
+          <li><a class="nav-tab" href="解説者・編集者募集.html">解説・編集者募集</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page">
+    <!-- パンくず：ホーム ＞ 問題名_問題番号 -->
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="index.html">ホーム</a>
+      <span class="breadcrumb-sep">＞</span>
+      <span class="breadcrumb-current" id="breadcrumbCurrent">
+        <!-- JSで「問題名_問題番号」を入れる -->
+      </span>
+    </nav>
+
+    <section class="whiteboard" aria-label="解説ホワイトボード">
+      <div class="whiteboard-inner" id="whiteboardContent">
+        <!-- JSで中身を差し込む -->
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // ------------------------
+    // ダミー問題＋解説データ
+    // ------------------------
+    const solutionProblems = [
+      {
+        id: 1,
+        problemId: "Q001",
+        title: "固有値と対角化（2×2行列）",
+        imageUrl:
+          "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1200&q=80",
+        author: "解説：片岡ユウト",
+        coEditors: ["共同編集：編入ラボ有志A", "共同編集：編入ラボ有志B"],
+        tags: ["数学", "線形代数", "固有値・固有ベクトル", "難関国公立大学向け"],
+        mainTag: "線形代数",
+        aim: "この問題のねらいは、「2×2 行列の固有値・固有ベクトルの計算手順」を、型として身につけることです。\n\n・固有値：特性方程式 det(A - λI) = 0 を立てて解く\n・固有ベクトル：その λ を代入した (A - λI)v = 0 を解く\n\nという一連の流れを、反射的に思い出せるレベルまで繰り返すことが目的です。",
+        markdown: `## 解説の全体像
+
+この問題では、次の **2×2 行列** の固有値と固有ベクトルを求めます。
+
+\`\`\`
+A = [ 1   2 ]
+    [ 3   4 ]
+\`\`\`
+
+手順はいつも同じです：
+
+1. 特性方程式 \`det(A - λI) = 0\` を立てて **固有値 λ** を求める  
+2. 各固有値 λ に対して \`(A - λI)v = 0\` を解き、**固有ベクトル v** を求める
+
+---
+
+## Step 1: 固有値を求める
+
+まず、\`A - λI\` を書き下します。
+
+\`\`\`
+A - λI = [ 1-λ   2   ]
+         [  3   4-λ ]
+\`\`\`
+
+固有値は
+
+> det(A - λI) = 0
+
+を満たす λ なので、行列式を計算します。
+
+\`\`\`
+det(A - λI)
+= (1-λ)(4-λ) - 3×2
+= (1-λ)(4-λ) - 6
+\`\`\`
+
+ここを丁寧に展開すると：
+
+\`\`\`
+(1-λ)(4-λ)
+= 1×4 + 1×(-λ) + (-λ)×4 + (-λ)×(-λ)
+= 4 - λ - 4λ + λ^2
+= λ^2 - 5λ + 4
+\`\`\`
+
+したがって
+
+\`\`\`
+det(A - λI)
+= (λ^2 - 5λ + 4) - 6
+= λ^2 - 5λ - 2
+\`\`\`
+
+つまり、固有値 λ は
+
+\`\`\`
+λ^2 - 5λ - 2 = 0
+\`\`\`
+
+の解として求まります。
+
+2次方程式の解の公式より
+
+\`\`\`
+λ = (5 ± √(25 + 8)) / 2
+  = (5 ± √33) / 2
+\`\`\`
+
+ここまでで、固有値は 2 つ：
+
+- \`λ₁ = (5 + √33) / 2\`
+- \`λ₂ = (5 - √33) / 2\`
+
+となります。
+
+---
+
+## Step 2: 固有ベクトルを求める
+
+次に、各 λ について \`(A - λI)v = 0\` を解きます。  
+ここは「**連立一次方程式の解（ただし 0 でないベクトルなら何でもいい）」**というイメージでOKです。
+
+### (1) λ₁ に対する固有ベクトル
+
+\`\`\`
+(A - λ₁I)v = 0
+\`\`\`
+
+より、成分で書くと
+
+\`\`\`
+(1 - λ₁)x + 2y = 0
+3x + (4 - λ₁)y = 0
+\`\`\`
+
+のような連立方程式になります。
+
+2行目は 1 行目の定数倍になっているので、実質 1 本だけ見れば十分です。  
+例えば 1 行目から
+
+\`\`\`
+(1 - λ₁)x + 2y = 0
+→ (1 - λ₁)x = -2y
+→ x = -2y / (1 - λ₁)
+\`\`\`
+
+と表せます。ここで、\`y = 1\` のように **自由に 1 つ値を決める** と
+
+\`\`\`
+x = -2 / (1 - λ₁)
+\`\`\`
+
+が決まり、固有ベクトルの 1 つの例として
+
+\`\`\`
+v₁ = ( -2 / (1 - λ₁),  1 )^T
+\`\`\`
+
+のように書けます（もちろん定数倍したものも全部 OK）。
+
+### (2) λ₂ に対する固有ベクトル
+
+同様に、\`λ₂ = (5 - √33)/2\` を代入して
+
+\`\`\`
+(1 - λ₂)x + 2y = 0
+\`\`\`
+
+から同じように求めれば、固有ベクトル \`v₂\` を 1 つ作ることができます。
+
+---
+
+## Step 3: なぜ対角化と関係するのか？
+
+2×2 行列の場合、
+
+- **異なる固有値が 2 つ** 見つかれば
+- それぞれに対応する固有ベクトルは **必ず一次独立**
+
+になるので、行列は対角化可能です。
+
+今回も λ₁, λ₂ は異なる値なので、
+
+> 「A は対角化可能」  
+> 「A の固有ベクトル 2 本で基底を作れる」
+
+という結論が得られます。
+
+---
+
+## まとめ
+
+この問題で押さえておきたいポイントは次の 3 つです。
+
+- 固有値：\`det(A - λI) = 0\` から 2次方程式を解く
+- 固有ベクトル：\`(A - λI)v = 0\` を解き、成分の一方を 1 とおく
+- 異なる固有値が 2 つあれば、2×2 行列は対角化可能
+
+特に、\`(A - λI)v = 0\` の計算を **「連立一次方程式を解く」作業として慣れておく** と、  
+編入試験での線形代数問題がかなり取りやすくなります。`
+      }
+      // 他の問題もここに追加予定
+    ];
+
+    function getQueryId() {
+      const params = new URLSearchParams(location.search);
+      const raw = params.get("id");
+      const id = Number(raw);
+      return Number.isFinite(id) && id > 0 ? id : 1;
+    }
+
+    function escapeHtml(str) {
+      return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
+
+    // 簡易 Markdown → HTML
+    function renderMarkdown(md) {
+      if (!md) return "";
+
+      const codeBlocks = [];
+      md = md.replace(/```([\s\S]*?)```/g, (match, code) => {
+        const token = `__CODEBLOCK_${codeBlocks.length}__`;
+        codeBlocks.push(code);
+        return token;
+      });
+
+      const lines = md.split(/\r?\n/);
+      let html = "";
+      let inList = false;
+
+      for (let line of lines) {
+        const trimmed = line.trim();
+
+        if (trimmed === "") {
+          if (inList) {
+            html += "</ul>";
+            inList = false;
+          }
+          html += "<p></p>";
+          continue;
+        }
+
+        if (trimmed.startsWith("## ")) {
+          if (inList) {
+            html += "</ul>";
+            inList = false;
+          }
+          html += `<h2>${escapeHtml(trimmed.slice(3))}</h2>`;
+          continue;
+        }
+        if (trimmed.startsWith("### ")) {
+          if (inList) {
+            html += "</ul>";
+            inList = false;
+          }
+          html += `<h3>${escapeHtml(trimmed.slice(4))}</h3>`;
+          continue;
+        }
+
+        if (trimmed.startsWith("- ")) {
+          if (!inList) {
+            html += "<ul>";
+            inList = true;
+          }
+          html += `<li>${escapeHtml(trimmed.slice(2))}</li>`;
+          continue;
+        }
+
+        if (/^---+$/.test(trimmed)) {
+          if (inList) {
+            html += "</ul>";
+            inList = false;
+          }
+          html += "<hr>";
+          continue;
+        }
+
+        if (inList) {
+          html += "</ul>";
+          inList = false;
+        }
+        html += `<p>${escapeHtml(trimmed)}</p>`;
+      }
+
+      if (inList) {
+        html += "</ul>";
+      }
+
+      html = html.replace(/`([^`]+)`/g, "<code>$1</code>");
+
+      codeBlocks.forEach((code, index) => {
+        const safeCode = escapeHtml(code.trimEnd());
+        const blockHtml = `<pre><code>${safeCode}</code></pre>`;
+        html = html.replace(`__CODEBLOCK_${index}__`, blockHtml);
+      });
+
+      return html;
+    }
+
+    function renderSolutionPage(problem) {
+      const container = document.getElementById("whiteboardContent");
+      const breadcrumbCurrent = document.getElementById("breadcrumbCurrent");
+
+      if (!problem) {
+        container.innerHTML =
+          "<p>指定された問題が見つかりませんでした。</p>";
+        breadcrumbCurrent.textContent = "問題が見つかりません";
+        return;
+      }
+
+      // パンくず：「問題名_問題番号」
+      breadcrumbCurrent.textContent = `${problem.title}_${problem.problemId}`;
+
+      const tagsHtml = (problem.tags || [])
+        .map((t) => {
+          const cls =
+            problem.mainTag && problem.mainTag === t ? "tag tag-main" : "tag";
+          return `<span class="${cls}">${t}</span>`;
+        })
+        .join("");
+
+      const coEditors = problem.coEditors || [];
+
+      container.innerHTML = `
+        <header class="wb-header">
+          <div class="wb-title-block">
+            <div class="wb-problem-id">${problem.problemId || ""}</div>
+            <h1 class="wb-title">${problem.title}</h1>
+          </div>
+          <div class="wb-meta">
+            <div class="wb-names">
+              <span class="wb-name-pill">${problem.author || "解説：名無し"}</span>
+              ${
+                coEditors.length
+                  ? coEditors
+                      .map((n) => `<span class="wb-name-pill">${n}</span>`)
+                      .join("")
+                  : ""
+              }
+            </div>
+            <div>co-study による共同編集済み</div>
+          </div>
+        </header>
+
+        <div class="wb-tags-row">
+          <div class="tag-list">${tagsHtml}</div>
+          <button class="heart-button" type="button" id="heartButton">
+            <span class="heart">♡</span>
+            <span>気になるに追加</span>
+          </button>
+        </div>
+
+        <figure class="wb-image-wrap">
+          <div class="wb-image-inner">
+            <img src="${
+              problem.imageUrl ||
+              "https://via.placeholder.com/1200x600?text=Problem+Image"
+            }" alt="${problem.title}">
+          </div>
+          <figcaption class="wb-image-caption">
+            問題本文・図のイメージ（実際の試験問題を想定したレイアウト）
+          </figcaption>
+        </figure>
+
+        <section class="wb-aim">
+          <button class="aim-toggle" type="button" id="aimToggle">
+            <div class="aim-toggle-label">
+              <span class="icon">🎯</span>
+              <span>問題のねらいを見る</span>
+            </div>
+            <div>＋</div>
+          </button>
+          <div class="aim-body" id="aimBody">
+            ${
+              problem.aim
+                ? problem.aim
+                    .split("\n")
+                    .map((line) =>
+                      line.trim() === "" ? "<p></p>" : `<p>${line}</p>`
+                    )
+                    .join("")
+                : "<p>この問題のねらいは準備中です。</p>"
+            }
+          </div>
+        </section>
+
+        <section aria-label="解説">
+          <div class="wb-section-title">解説（Markdown形式で整理）</div>
+          <div class="wb-markdown" id="markdownBody"></div>
+        </section>
+      `;
+
+      const markdownBody = document.getElementById("markdownBody");
+      markdownBody.innerHTML = renderMarkdown(problem.markdown || "");
+
+      const heartButton = document.getElementById("heartButton");
+      let liked = false;
+      heartButton.addEventListener("click", () => {
+        liked = !liked;
+        heartButton.querySelector(".heart").textContent = liked ? "❤" : "♡";
+        heartButton.style.backgroundColor = liked ? "#fee2e2" : "#fef2f2";
+      });
+
+      const aimToggle = document.getElementById("aimToggle");
+      const aimBody = document.getElementById("aimBody");
+      let aimOpen = false;
+      aimToggle.addEventListener("click", () => {
+        aimOpen = !aimOpen;
+        aimBody.style.display = aimOpen ? "block" : "none";
+        aimToggle.querySelector("div:last-child").textContent = aimOpen ? "－" : "＋";
+      });
+    }
+
+    // 初期化
+    const id = getQueryId();
+    const problem = solutionProblems.find((p) => p.id === id);
+    renderSolutionPage(problem);
+  </script>
+</body>
+</html>

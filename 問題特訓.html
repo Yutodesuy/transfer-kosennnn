@@ -1,0 +1,732 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>問題特訓｜高専から編入せよ！</title>
+   <link rel="icon" href="favicon.png" sizes="512x512">
+<link rel="shortcut icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      color-scheme: dark;
+    }
+
+    body {
+      margin: 0;
+      background: #020617;
+      color: #e5e7eb;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    header {
+      padding: 0.6rem 1.5rem 0.3rem;
+      border-bottom: 1px solid #1f2937;
+      background: #020617aa;
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .header-inner {
+      max-width: 980px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .logo {
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      color: #38bdf8;
+      white-space: nowrap;
+    }
+
+    .beta-label {
+      font-size: 0.75rem;
+      color: #9ca3af;
+      white-space: nowrap;
+    }
+
+    /* タブナビ */
+    .nav {
+      margin-top: 0.1rem;
+      overflow-x: auto;
+    }
+
+    .nav-tabs {
+      display: inline-flex;
+      gap: 0.4rem;
+      padding: 0.25rem 0;
+      list-style: none;
+      margin: 0;
+    }
+
+    .nav-tab {
+      font-size: 0.8rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      color: #9ca3af;
+      cursor: pointer;
+      white-space: nowrap;
+      background: transparent;
+      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .nav-tab:hover {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: #1f2937;
+      color: #e5e7eb;
+    }
+
+    .nav-tab.active {
+      background: radial-gradient(circle at top left, #0ea5e9, #38bdf8);
+      color: #0b1120;
+      border-color: transparent;
+      font-weight: 600;
+    }
+
+    @media (min-width: 720px) {
+      .header-inner {
+        flex-direction: column;
+      }
+      .header-top {
+        flex-direction: row;
+      }
+    }
+
+    /* ヒーロー */
+    .hero {
+      position: relative;
+      padding: 3.2rem 1.5rem 2.4rem;
+      max-width: 980px;
+      margin: 0 auto;
+      overflow: hidden;
+      border-bottom: 1px solid #1f2937;
+      border-radius: 0 0 1.5rem 1.5rem;
+      isolation: isolate;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(135deg, rgba(15,23,42,0.94), rgba(8,47,73,0.85)),
+        url("https://images.unsplash.com/photo-1518310383802-640c2de311b2?auto=format&fit=crop&w=1400&q=80");
+      background-size: cover;
+      background-position: center;
+      opacity: 0.98;
+      z-index: -1;
+      transform: scale(1.03);
+    }
+
+    .hero-inner {
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    .hero-kicker {
+      font-size: 0.8rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #7dd3fc;
+      margin-bottom: 0.6rem;
+    }
+
+    .hero-title {
+      font-size: clamp(1.8rem, 3.6vw, 2.3rem);
+      font-weight: 800;
+      margin-bottom: 0.4rem;
+    }
+
+    .hero-sub {
+      color: #e5e7eb;
+      font-size: 0.95rem;
+      line-height: 1.8;
+      opacity: 0.9;
+    }
+
+    .hero-sub strong {
+      color: #7dd3fc;
+      font-weight: 600;
+    }
+
+    /* ページレイアウト */
+    .page {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 1.8rem 1.5rem 3rem;
+      display: grid;
+      grid-template-columns: minmax(0, 2.1fr) minmax(0, 1.1fr);
+      gap: 1.8rem;
+    }
+
+    @media (max-width: 768px) {
+      .page {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    /* 問題パネル */
+    .problem-panel {
+      border-radius: 1.4rem;
+      border: 1px solid #1f2937;
+      background: radial-gradient(circle at top left, #1f2937, #020617);
+      padding: 1.2rem 1.2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+
+    .problem-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .problem-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      font-size: 0.75rem;
+    }
+
+    .badge {
+      padding: 0.15rem 0.55rem;
+      border-radius: 999px;
+      border: 1px solid #1f2937;
+      background: rgba(15,23,42,0.9);
+      color: #9ca3af;
+      white-space: nowrap;
+    }
+
+    .badge.subject {
+      border-color: #38bdf8;
+      color: #7dd3fc;
+    }
+
+    .badge.diff-easy {
+      border-color: #22c55e;
+      color: #bbf7d0;
+    }
+
+    .badge.diff-medium {
+      border-color: #eab308;
+      color: #facc15;
+    }
+
+    .badge.diff-hard {
+      border-color: #f97316;
+      color: #fed7aa;
+    }
+
+    .badge.target {
+      border-color: #6366f1;
+      color: #c7d2fe;
+    }
+
+    .problem-progress {
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+
+    .problem-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-top: 0.2rem;
+    }
+
+    .problem-subtitle {
+      font-size: 0.85rem;
+      color: #9ca3af;
+      margin-top: 0.15rem;
+    }
+
+    .problem-body {
+      margin-top: 0.4rem;
+      padding: 0.9rem 0.85rem;
+      border-radius: 0.9rem;
+      background: radial-gradient(circle at top left, #020617, #020617);
+      border: 1px solid #111827;
+      font-size: 0.9rem;
+      line-height: 1.8;
+      white-space: pre-wrap;
+    }
+
+    .problem-note {
+      margin-top: 0.2rem;
+      font-size: 0.78rem;
+      color: #9ca3af;
+    }
+
+    .controls {
+      margin-top: 0.7rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .btn {
+      border-radius: 999px;
+      border: 1px solid #1f2937;
+      padding: 0.35rem 0.9rem;
+      font-size: 0.8rem;
+      background: rgba(15,23,42,0.95);
+      color: #e5e7eb;
+      cursor: pointer;
+    }
+
+    .btn.primary {
+      border-color: #38bdf8;
+      background: radial-gradient(circle at top left, #0ea5e9, #38bdf8);
+      color: #0b1120;
+      font-weight: 600;
+    }
+
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: default;
+    }
+
+    .controls-note {
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+
+    .answer-panel {
+      margin-top: 0.7rem;
+      border-radius: 0.95rem;
+      border: 1px dashed #1f2937;
+      background: radial-gradient(circle at top left, #020617, #020617);
+      padding: 0.7rem 0.85rem;
+      font-size: 0.86rem;
+      display: none;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .answer-label {
+      font-size: 0.78rem;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .answer-body {
+      line-height: 1.7;
+      white-space: pre-wrap;
+    }
+
+    .answer-hint {
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+
+    /* サイドパネル */
+    .side-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .side-card {
+      border-radius: 1.2rem;
+      border: 1px solid #1f2937;
+      background: radial-gradient(circle at top left, #0f172a, #020617);
+      padding: 0.9rem 1rem;
+      font-size: 0.88rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .side-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 0.1rem;
+    }
+
+    .side-body {
+      font-size: 0.86rem;
+      color: #d1d5db;
+      line-height: 1.7;
+    }
+
+    .side-body ul {
+      margin: 0.35rem 0 0 1rem;
+      padding: 0;
+    }
+
+    .side-body li {
+      margin: 0.1rem 0;
+    }
+
+    .hint-chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-top: 0.2rem;
+    }
+
+    .hint-chip {
+      border-radius: 999px;
+      border: 1px solid #1f2937;
+      padding: 0.15rem 0.55rem;
+      font-size: 0.75rem;
+      color: #9ca3af;
+      background: rgba(15,23,42,0.9);
+    }
+
+    .memo-area {
+      width: 100%;
+      min-height: 90px;
+      border-radius: 0.8rem;
+      border: 1px solid #1f2937;
+      background: rgba(15,23,42,0.95);
+      color: #e5e7eb;
+      font-size: 0.8rem;
+      padding: 0.6rem 0.7rem;
+      resize: vertical;
+      outline: none;
+    }
+
+    .memo-area:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 1px #38bdf8;
+    }
+
+    .small-label {
+      font-size: 0.78rem;
+      color: #9ca3af;
+      margin-bottom: 0.3rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <div class="header-top">
+        <div class="logo">高専から編入せよ！</div>
+        <div class="beta-label">β / training mode</div>
+      </div>
+      <nav class="nav">
+  <ul class="nav-tabs">
+    <li><a class="nav-tab" href="index.html">ホーム</a></li>
+    <li><a class="nav-tab" href="仕組み.html">プラットフォームの仕組み</a></li>
+    <li><a class="nav-tab active" href="問題特訓.html">問題特訓</a></li>
+    <li><a class="nav-tab" href="解説者・編集者募集.html">解説・編集者募集</a></li>
+  </ul>
+</nav>
+
+    </div>
+  </header>
+
+  <!-- ヒーロー -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-kicker">training mode</div>
+      <h1 class="hero-title">AI問題で、とにかく手を動かす「問題特訓」</h1>
+      <p class="hero-sub">
+        このページでは、<strong>AI が作成したオリジナルの編入対策問題</strong>を、次々に解いていきます。<br>
+        採点は<strong>自己採点</strong>。答えはその場で確認できるので、<br>
+        「まずは量をこなす」「間違えたら解説付き問題で深掘りする」という流れを想定しています。
+      </p>
+    </div>
+  </section>
+
+  <main class="page">
+    <!-- 左：問題本体 -->
+    <section class="problem-panel" aria-label="問題特訓エリア">
+      <header class="problem-header">
+        <div class="problem-badges" id="badgeContainer">
+          <!-- バッジはJSで入れる -->
+        </div>
+        <div class="problem-progress" id="problemProgress">
+          <!-- 1 / N 形式で表示 -->
+        </div>
+      </header>
+
+      <div>
+        <div class="problem-title" id="problemTitle"></div>
+        <div class="problem-subtitle" id="problemSubtitle"></div>
+      </div>
+
+      <div class="problem-body" id="problemBody"></div>
+      <div class="problem-note">
+        ノートや紙にしっかり途中式を書きながら、自分の力で最後まで解いてみてください。
+      </div>
+
+      <div class="controls">
+        <button class="btn" type="button" id="prevButton">前の問題</button>
+        <button class="btn primary" type="button" id="nextButton">次の問題</button>
+        <button class="btn" type="button" id="toggleAnswerButton">解答を表示</button>
+        <span class="controls-note">※ 採点は自己採点です。正解・不正解を自分でチェックしましょう。</span>
+      </div>
+
+      <section class="answer-panel" id="answerPanel" aria-label="解答エリア">
+        <div class="answer-label">answer &amp; idea</div>
+        <div class="answer-body" id="answerBody"></div>
+        <div class="answer-hint" id="answerHint"></div>
+      </section>
+    </section>
+
+    <!-- 右：使い方・メモなど -->
+    <aside class="side-panel">
+      <article class="side-card">
+        <div class="side-title">この「問題特訓」の使い方</div>
+        <div class="side-body">
+          <ul>
+            <li>1問ずつ、AI が作成したオリジナル問題が表示されます。</li>
+            <li>まずは<strong>自力で解答</strong>してから、「解答を表示」を押してください。</li>
+            <li>自分の解答と見比べて、丸つけ・自己採点を行います。</li>
+            <li>解き方が不安な問題は、のちに「解説付き問題」で深く確認していきます。</li>
+          </ul>
+          <div class="hint-chip-row">
+            <span class="hint-chip">一気に解くより「毎日少しずつ」</span>
+            <span class="hint-chip">間違えた問題に⭐マークをつけて管理</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="side-card">
+        <div class="side-title">AI問題について</div>
+        <div class="side-body">
+          <ul>
+            <li>問題は、せよ！専用に<strong>AI が作成したオリジナル問題</strong>です。</li>
+            <li>実際の編入レベルに合わせて、分野・難易度をチューニングしています。</li>
+            <li>良問は「解説付き問題」にも展開し、co-study によって解説が付きます。</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="side-card">
+        <div class="side-title">今日の学習メモ</div>
+        <p class="small-label">
+          つまずいたポイントや、「次に解説付きで読みたい問題」を簡単にメモしておきましょう。
+        </p>
+        <textarea class="memo-area" placeholder="例）固有値計算でミスりがち。行列式の計算を復習する。"></textarea>
+      </article>
+    </aside>
+  </main>
+
+  <script>
+    // ダミー問題データ（あとでAPI連携・DBに差し替え予定）
+    const trainingProblems = [
+      {
+        id: 1,
+        subject: "math",
+        difficulty: "medium",
+        targets: ["utokyo", "tsukuba"],
+        title: "固有値と固有ベクトル（2×2行列）",
+        subtitle: "難関国公立大学レベルの線形代数の基礎",
+        body: `次の 2×2 行列 A の固有値と、それぞれに対応する固有ベクトルを求めよ。
+
+        A = \u301001  12
+               3   4\u3011
+
+（1）A の固有値 λ をすべて求めよ。
+（2）それぞれの固有値 λ に対して、固有ベクトルを 1 つずつ求めよ。`,
+        answer: `（1）固有値
+
+det(A - λI) = 0 より、
+
+ |1-λ   2|
+ |3   4-λ| = (1-λ)(4-λ) - 6
+          = λ^2 -5λ -2 = 0
+
+よって、λ = (5 ± √(25 + 8)) / 2 = (5 ± √33) / 2
+
+（2）固有ベクトル
+
+例として λ₁ = (5 + √33)/2 のとき、
+(1-λ₁)x + 2y = 0 などから、y を 1 とおけば x が一意に決まる。
+
+同様に λ₂ = (5 - √33)/2 に対しても求まる。
+（方針としては、「(A - λI)v = 0 を解く」ことがポイント。）`,
+        hint: "行列式から固有値を出し、そのあと (A - λI)v = 0 を解くという「型」を意識すると整理しやすいです。"
+      },
+      {
+        id: 2,
+        subject: "math",
+        difficulty: "easy",
+        targets: ["tmu"],
+        title: "一次線形微分方程式の解法",
+        subtitle: "解き方の「型」を体に染み込ませる",
+        body: `次の微分方程式を解け。
+
+        y' + 2y = e^x
+
+（1）まず、対応する同次方程式 y' + 2y = 0 の一般解を求めよ。
+（2）次に、非同次方程式 y' + 2y = e^x の特解を 1 つ求めよ。
+（3）全体の一般解をまとめよ。`,
+        answer: `（1）同次方程式 y' + 2y = 0
+
+y' = -2y より、分離して積分すると
+  dy/y = -2 dx
+  ln|y| = -2x + C
+  y = C e^{-2x}
+
+（2）特解
+
+右辺が e^x なので、特解を y_p = Ae^x と仮定する。
+
+y_p' + 2y_p = Ae^x + 2Ae^x = 3Ae^x
+
+これが e^x に等しくなればよいので 3A = 1 → A = 1/3
+
+よって特解は y_p = (1/3)e^x
+
+（3）一般解
+
+y = y_h + y_p = C e^{-2x} + (1/3)e^x`,
+        hint: "「同次＋特解＝一般解」という一次線形微分方程式のテンプレ構造を意識してみてください。"
+      },
+      {
+        id: 3,
+        subject: "english",
+        difficulty: "medium",
+        targets: ["utokyo", "tsukuba", "tmu"],
+        title: "英作文：高専から編入する理由を説明せよ",
+        subtitle: "自分のストーリーを短い英文に落とし込む練習",
+        body: `次の日本語を、50〜80 語程度の自然な英語にせよ。
+
+「私は高専で情報・セキュリティ分野を学んでいるが、より広い視点でシステムを設計できる力を身につけたい。そのために、工学だけでなく社会や経済も横断的に学べる大学に編入したいと考えている。」`,
+        answer: `模範解答例（あくまで一例）：
+
+I am studying information technology and security at my college of technology, 
+but I want to develop the ability to design systems from a broader perspective. 
+To achieve this, I hope to transfer to a university where I can study not only 
+engineering but also society and economics in an integrated way.
+
+ポイント：
+・"college of technology" で「高専」を説明する
+・"from a broader perspective" で「より広い視点」を表現
+・"not only A but also B" で対比構造を作る`,
+        hint: "高専で何をしてきて、なぜ大学でないとダメなのか、という 2 点が伝わればOKです。完璧な文法より、筋の通ったストーリーを意識してみてください。"
+      }
+    ];
+
+    const subjectLabel = (sub) =>
+      sub === "math" ? "数学" : sub === "english" ? "英語" : "情報・アルゴリズム";
+
+    const diffClass = (d) =>
+      ({ easy: "diff-easy", medium: "diff-medium", hard: "diff-hard" }[d] || "");
+
+    const diffLabel = (d) =>
+      d === "easy" ? "やさしい" : d === "medium" ? "標準" : d === "hard" ? "難しい" : d;
+
+    const targetLabel = (t) =>
+      t === "utokyo"
+        ? "東大シス創成"
+        : t === "tsukuba"
+        ? "筑波 社会工学類"
+        : t === "tmu"
+        ? "都立大 情報科学"
+        : t;
+
+    let currentIndex = 0;
+
+    const badgeContainer = document.getElementById("badgeContainer");
+    const progressEl = document.getElementById("problemProgress");
+    const titleEl = document.getElementById("problemTitle");
+    const subtitleEl = document.getElementById("problemSubtitle");
+    const bodyEl = document.getElementById("problemBody");
+    const answerPanel = document.getElementById("answerPanel");
+    const answerBodyEl = document.getElementById("answerBody");
+    const answerHintEl = document.getElementById("answerHint");
+    const prevButton = document.getElementById("prevButton");
+    const nextButton = document.getElementById("nextButton");
+    const toggleAnswerButton = document.getElementById("toggleAnswerButton");
+
+    function renderProblem(index) {
+      const p = trainingProblems[index];
+      if (!p) return;
+
+      // バッジ
+      badgeContainer.innerHTML = "";
+
+      const subjectBadge = document.createElement("span");
+      subjectBadge.className = "badge subject";
+      subjectBadge.textContent = subjectLabel(p.subject);
+      badgeContainer.appendChild(subjectBadge);
+
+      const diffBadge = document.createElement("span");
+      diffBadge.className = "badge " + diffClass(p.difficulty);
+      diffBadge.textContent = diffLabel(p.difficulty);
+      badgeContainer.appendChild(diffBadge);
+
+      if (p.targets && p.targets.length > 0) {
+        p.targets.forEach((t) => {
+          const targetBadge = document.createElement("span");
+          targetBadge.className = "badge target";
+          targetBadge.textContent = targetLabel(t);
+          badgeContainer.appendChild(targetBadge);
+        });
+      }
+
+      // 進捗
+      progressEl.textContent = `${index + 1} / ${trainingProblems.length} 問`;
+
+      // 本文
+      titleEl.textContent = p.title;
+      subtitleEl.textContent = p.subtitle || "";
+      bodyEl.textContent = p.body;
+
+      // 解答欄
+      answerBodyEl.textContent = p.answer || "解答は準備中です。";
+      answerHintEl.textContent = p.hint || "";
+      answerPanel.style.display = "none";
+      toggleAnswerButton.textContent = "解答を表示";
+
+      // ボタン状態
+      prevButton.disabled = index === 0;
+      nextButton.disabled = index === trainingProblems.length - 1;
+    }
+
+    prevButton.addEventListener("click", () => {
+      if (currentIndex > 0) {
+        currentIndex--;
+        renderProblem(currentIndex);
+      }
+    });
+
+    nextButton.addEventListener("click", () => {
+      if (currentIndex < trainingProblems.length - 1) {
+        currentIndex++;
+        renderProblem(currentIndex);
+      }
+    });
+
+    toggleAnswerButton.addEventListener("click", () => {
+      const isHidden = answerPanel.style.display === "none";
+      answerPanel.style.display = isHidden ? "flex" : "none";
+      toggleAnswerButton.textContent = isHidden ? "解答を隠す" : "解答を表示";
+    });
+
+    // 初期表示
+    renderProblem(currentIndex);
+  </script>
+</body>
+</html>
