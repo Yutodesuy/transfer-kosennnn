@@ -1,128 +1,264 @@
 // app/page.tsx
 import Link from "next/link";
 
+const mockCopeers = [
+  {
+    id: "c-001",
+    name: "山本 凛",
+    role: "数学 Copeer",
+    school: "高知高専 電気情報工学科",
+    badge: "Platinum Copeer",
+    intro:
+      "極限・微分を「グラフと言葉」で説明するのが得意。編入数学の“わからん”を一緒にほどいていきます。",
+    focus: ["微分積分", "極限", "証明"],
+  },
+  {
+    id: "c-002",
+    name: "佐藤 海斗",
+    role: "物理 Copeer",
+    school: "香川高専 機械工学科",
+    badge: "Gold Copeer",
+    intro:
+      "力学の図解とエネルギー視点の解説を担当。式だけじゃなく、イメージで腑に落ちる物理を目指してます。",
+    focus: ["力学", "振動・波動"],
+  },
+  {
+    id: "c-003",
+    name: "中村 彩",
+    role: "情報 Copeer",
+    school: "高知高専 情報セキュリティ系",
+    badge: "Gold Copeer",
+    intro:
+      "ネットワーク・セキュリティの基礎を“高専生のことば”で解説。暗記じゃなくて仕組みから理解したい人向け。",
+    focus: ["ネットワーク", "情報セキュリティ"],
+  },
+  {
+    id: "c-004",
+    name: "田中 悠",
+    role: "英語 Copeer",
+    school: "徳山高専 制御情報工学科",
+    badge: "Silver Copeer",
+    intro:
+      "編入英語の長文・英作文を担当。日本語での発想をどう英語に乗せるか、一緒に練習していきましょう。",
+    focus: ["長文読解", "英作文"],
+  },
+];
+
+function CopeersSection() {
+  return (
+    <section className="border-b border-slate-800 bg-slate-950">
+      <div className="mx-auto max-w-5xl px-4 py-12 md:py-16 space-y-4">
+        <header className="space-y-2">
+          <p className="inline-flex items-center gap-2 rounded-full border border-cyan-500/40 bg-cyan-500/10 px-3 py-1 text-xs font-medium text-cyan-200">
+            <span className="inline-block h-2 w-2 rounded-full bg-cyan-400" />
+            コピアにはこんな人がいます
+          </p>
+          <h2 className="text-lg font-semibold text-slate-50 md:text-xl">
+            解説を書いている先輩・講師たちの一例
+          </h2>
+          <p className="max-w-2xl text-xs text-slate-300 md:text-sm">
+            実際のサービスでは、Copeer の情報はデータベースから自動で取得して表示します。
+            ここではイメージとして、代表的な4人の Copeer を紹介しています。
+          </p>
+        </header>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          {mockCopeers.map((copeer) => (
+            <article
+              key={copeer.id}
+              className="group relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/60 p-4 shadow-md shadow-black/40 transition hover:-translate-y-0.5 hover:border-cyan-400/70 hover:shadow-lg hover:shadow-cyan-500/30"
+            >
+              {/* 背景グラデーション */}
+              <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                <div className="absolute -right-10 -top-10 h-24 w-24 rounded-full bg-cyan-500/30 blur-3xl" />
+                <div className="absolute -bottom-12 -left-10 h-28 w-28 rounded-full bg-fuchsia-500/25 blur-3xl" />
+              </div>
+
+              <div className="relative z-10 space-y-3">
+                <header className="flex items-start justify-between gap-2">
+                  <div>
+                    <p className="text-[11px] font-medium uppercase tracking-wide text-cyan-300">
+                      {copeer.role}
+                    </p>
+                    <h3 className="text-sm font-semibold text-slate-50 md:text-base">
+                      {copeer.name}
+                    </h3>
+                    <p className="text-[11px] text-slate-400">{copeer.school}</p>
+                  </div>
+                  <span className="rounded-full border border-amber-400/70 bg-amber-500/10 px-2 py-1 text-[10px] font-semibold text-amber-200">
+                    {copeer.badge}
+                  </span>
+                </header>
+
+                <p className="text-xs leading-relaxed text-slate-200 md:text-sm">
+                  {copeer.intro}
+                </p>
+
+                <div className="flex flex-wrap gap-1.5">
+                  {copeer.focus.map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-full bg-slate-800/80 px-2 py-0.5 text-[10px] text-slate-200 group-hover:bg-slate-800/90"
+                    >
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="flex items-center justify-between text-[11px] text-slate-400">
+                  <span>主な担当：解説付き問題・添削コメント</span>
+                  <span className="inline-flex items-center gap-1 text-[11px] font-medium text-cyan-300">
+                    coming soon
+                  </span>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <p className="text-[11px] text-slate-400">
+          ※ 将来的には「講師一覧」「Copeer 一覧」ページとして独立させるかもしれませんが、
+          現段階ではホーム内の紹介セクションとして集約しています。
+        </p>
+      </div>
+    </section>
+  );
+}
+
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50">
       {/* ヘッダー / ナビゲーション */}
       <header className="sticky top-0 z-20 border-b border-slate-800 bg-slate-950/80 backdrop-blur">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
-          <Link href="/" className="flex items-baseline gap-1">
-            <span className="text-sm font-semibold text-slate-50">
-              高専から編入せよ！
-            </span>
-            <span className="text-[11px] text-slate-400">
-              co-study platform
-            </span>
-          </Link>
+          
 
           {/* PCナビ */}
-          <nav className="hidden md:flex items-center gap-6 mt-4">
+<nav className="mt-4 hidden w-full md:grid md:grid-cols-4 md:gap-6">
   {/* 解法アリーナ */}
-  <Link
-    href="/public/problems"
-    className="group flex items-center gap-4 px-5 py-4 rounded-2xl
-              bg-white/90 hover:bg-white shadow-xl
-              border border-slate-200
-              transition-all duration-200 hover:scale-[1.03]
-              hover:shadow-[0_8px_30px_rgba(0,0,0,0.15)]"
-  >
-    <div className="flex h-12 w-12 items-center justify-center rounded-xl
-                    bg-fuchsia-100 text-fuchsia-600 text-2xl shadow-inner">
-      📘
-    </div>
-
-    <div className="flex flex-col -space-y-1">
-      <span className="text-lg font-bold text-slate-900">解法アリーナ</span>
-      <span className="text-xs text-slate-500">問題の理解を深く、強く</span>
+  <Link href="/public/problems" className="group block">
+    <div className="relative">
+      <div
+        className="skew-x-[-12deg] rounded-2xl border border-slate-200
+                   bg-white/90 px-5 py-4 shadow-xl
+                   transition-all duration-200
+                   group-hover:scale-[1.03]
+                   group-hover:bg-white
+                   group-hover:shadow-[0_8px_30px_rgba(0,0,0,0.15)]"
+      >
+        <div className="skew-x-[12deg] flex items-center gap-4">
+          <div
+            className="flex h-12 w-12 items-center justify-center rounded-xl
+                       bg-fuchsia-100 text-2xl text-fuchsia-600 shadow-inner"
+          >
+            📘
+          </div>
+          <div className="flex flex-col -space-y-1">
+            <span className="text-lg font-bold text-slate-900">
+              解法アリーナ
+            </span>
+            <span className="text-xs text-slate-500">
+              問題の理解を深く、強く
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
   </Link>
-  
+
   {/* co-edit(共同編集室) */}
-  <Link
-    href="/public/co-edit"
-    className="group flex items-center gap-4 px-5 py-4 rounded-2xl
-              bg-white/90 hover:bg-white shadow-xl
-              border border-slate-200
-              transition-all duration-200 hover:scale-[1.03]
-              hover:shadow-[0_8px_30px_rgba(0,0,0,0.15)]"
-  >
-    <div className="flex h-12 w-12 items-center justify-center rounded-xl
-                    bg-cyan-100 text-cyan-600 text-2xl shadow-inner">
-      ✍️
-    </div>
-
-    <div className="flex flex-col -space-y-1">
-      <span className="text-lg font-bold text-slate-900">
-        co-edit
-      </span>
-      <span className="text-xs text-slate-500">解説を添削、作成する</span>
+  <Link href="/public/co-edit" className="group block">
+    <div className="relative">
+      <div
+        className="skew-x-[-12deg] rounded-2xl border border-slate-200
+                   bg-white/90 px-5 py-4 shadow-xl
+                   transition-all duration-200
+                   group-hover:scale-[1.03]
+                   group-hover:bg-white
+                   group-hover:shadow-[0_8px_30px_rgba(0,0,0,0.15)]"
+      >
+        <div className="skew-x-[12deg] flex items-center gap-4">
+          <div
+            className="flex h-12 w-12 items-center justify-center rounded-xl
+                       bg-cyan-100 text-2xl text-cyan-600 shadow-inner"
+          >
+            ✍️
+          </div>
+          <div className="flex flex-col -space-y-1">
+            <span className="text-lg font-bold text-slate-900">
+              co-edit
+            </span>
+            <span className="text-xs text-slate-500">
+              解説を添削、作成する
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
   </Link>
-  
-  {/* 問題コロシアム */}
-  <Link
-    href="/private/colosseum"
-    className="group flex items-center gap-4 px-5 py-4 rounded-2xl
-              bg-white/90 hover:bg-white shadow-xl
-              border border-slate-200
-              transition-all duration-200 hover:scale-[1.03]
-              hover:shadow-[0_8px_30px_rgba(0,0,0,0.15)]"
-  >
-    <div className="flex h-12 w-12 items-center justify-center rounded-xl
-                    bg-fuchsia-100 text-fuchsia-600 text-2xl shadow-inner">
-      🏟
-    </div>
 
-    <div className="flex flex-col -space-y-1">
-      <span className="text-lg font-bold text-slate-900">問題コロシアム</span>
-      <span className="text-xs text-slate-500">ひたすら解け。</span>
+  {/* 問題コロシアム */}
+  <Link href="/private/colosseum" className="group block">
+    <div className="relative">
+      <div
+        className="skew-x-[-12deg] rounded-2xl border border-slate-200
+                   bg-white/90 px-5 py-4 shadow-xl
+                   transition-all duration-200
+                   group-hover:scale-[1.03]
+                   group-hover:bg-white
+                   group-hover:shadow-[0_8px_30px_rgba(0,0,0,0.15)]"
+      >
+        <div className="skew-x-[12deg] flex items-center gap-4">
+          <div
+            className="flex h-12 w-12 items-center justify-center rounded-xl
+                       bg-fuchsia-100 text-2xl text-fuchsia-600 shadow-inner"
+          >
+            🏟
+          </div>
+          <div className="flex flex-col -space-y-1">
+            <span className="text-lg font-bold text-slate-900">
+              問題コロシアム
+            </span>
+            <span className="text-xs text-slate-500">
+              ひたすら解け。
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
   </Link>
 
   {/* コミュニティ / テクノゼミ */}
-  <Link
-    href="/public/community"
-    className="group flex items-center gap-4 px-5 py-4 rounded-2xl
-              bg-white/90 hover:bg-white shadow-xl
-              border border-slate-200
-              transition-all duration-200 hover:scale-[1.03]
-              hover:shadow-[0_8px_30px_rgba(0,0,0,0.15)]"
-  >
-    <div className="flex h-12 w-12 items-center justify-center rounded-xl
-                    bg-cyan-100 text-cyan-600 text-2xl shadow-inner">
-      🏫
-    </div>
-
-    <div className="flex flex-col -space-y-1">
-      <span className="text-lg font-bold text-slate-900">
-        コミュニティ / テクノゼミ
-      </span>
-      <span className="text-xs text-slate-500">仲間と学ぶ・磨く・伸ばす</span>
-    </div>
-  </Link>
-
-  {/* コピア紹介 */}
-  <Link
-    href="/public/copeers"
-    className="group flex items-center gap-4 px-5 py-4 rounded-2xl
-              bg-white/90 hover:bg-white shadow-xl
-              border border-slate-200
-              transition-all duration-200 hover:scale-[1.03]
-              hover:shadow-[0_8px_30px_rgba(0,0,0,0.15)]"
-  >
-    <div className="flex h-12 w-12 items-center justify-center rounded-xl
-                    bg-amber-100 text-amber-600 text-2xl shadow-inner">
-      👩‍🏫
-    </div>
-
-    <div className="flex flex-col -space-y-1">
-      <span className="text-lg font-bold text-slate-900">コピア紹介</span>
-      <span className="text-xs text-slate-500">実力ある先輩に学べる</span>
+  <Link href="/public/community" className="group block">
+    <div className="relative">
+      <div
+        className="skew-x-[-12deg] rounded-2xl border border-slate-200
+                   bg-white/90 px-5 py-4 shadow-xl
+                   transition-all duration-200
+                   group-hover:scale-[1.03]
+                   group-hover:bg白
+                   group-hover:shadow-[0_8px_30px_rgba(0,0,0,0.15)]"
+      >
+        <div className="skew-x-[12deg] flex items-center gap-4">
+          <div
+            className="flex h-12 w-12 items-center justify-center rounded-xl
+                       bg-cyan-100 text-2xl text-cyan-600 shadow-inner"
+          >
+            🏫
+          </div>
+          <div className="flex flex-col -space-y-1">
+            <span className="text-lg font-bold text-slate-900">
+              コミュニティ
+            </span>
+            <span className="text-xs text-slate-500">
+              仲間と学ぶ・磨く・伸ばす
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
   </Link>
 </nav>
-
 
 
           {/* モバイル簡易ナビ */}
@@ -132,9 +268,6 @@ export default function HomePage() {
             </Link>
             <Link href="/public/community" className="hover:text-slate-50">
               コミュニティ
-            </Link>
-            <Link href="/public/copeers" className="hover:text-slate-50">
-              コピア
             </Link>
           </nav>
         </div>
@@ -277,8 +410,7 @@ export default function HomePage() {
                 ].map((card, idx) => (
                   <div
                     key={card.title}
-                    className={`
-                      flex gap-3 rounded-2xl bg-slate-800/80 p-3 text-xs text-slate-100
+                    className={`flex gap-3 rounded-2xl bg-slate-800/80 p-3 text-xs text-slate-100
                       shadow-sm shadow-slate-900/70
                       transition duration-300 ease-out
                       hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-900/80
@@ -288,8 +420,7 @@ export default function HomePage() {
                           : idx === 2
                           ? "rotate-1"
                           : "rotate-0"
-                      }
-                    `}
+                      }`}
                   >
                     <div className="flex h-16 w-20 items-center justify-center rounded-xl border border-slate-600 bg-slate-950 text-[10px] text-slate-300">
                       問題
@@ -334,7 +465,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 最初の3ステップ（カードに一回だけポンっと出るアニメ） */}
+      {/* 最初の3ステップ */}
       <section className="border-b border-slate-800 bg-slate-950">
         <div className="mx-auto max-w-5xl px-4 py-10 md:py-14">
           <h2 className="text-lg font-semibold text-slate-50 md:text-xl">
@@ -481,6 +612,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* コピア紹介セクション（ホーム下部に統合） */}
+      <CopeersSection />
 
       {/* テクノゼミ連携セクション */}
       <section className="border-b border-slate-800 bg-slate-950">

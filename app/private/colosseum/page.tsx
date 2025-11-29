@@ -72,7 +72,6 @@ export default function ColosseumPage() {
     e.preventDefault();
     setError(null);
 
-    // 簡単なバリデーション
     if (!subject || !topic || !level) {
       setError("教科・単元・難易度をすべて選択してください。");
       return;
@@ -85,11 +84,6 @@ export default function ColosseumPage() {
     setIsSubmitting(true);
 
     try {
-      // TODO: 本番では API を叩いてセッションを作成
-      // const res = await fetch("/api/colosseum/session", { ... });
-      // const { sessionId } = await res.json();
-
-      // いまは仮の sessionId を使ってルーティングだけ先に作る
       const sessionId = `local-${Date.now()}`;
 
       const params = new URLSearchParams({
@@ -115,6 +109,17 @@ export default function ColosseumPage() {
       <div className="mx-auto flex max-w-5xl flex-col gap-8 px-4 py-10 md:py-16">
         {/* ヘッダー */}
         <header className="space-y-4">
+          {/* ホームへの導線（左上） */}
+          <div>
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900/70 px-4 py-1.5 text-xs font-medium text-slate-300 transition hover:border-fuchsia-500 hover:text-fuchsia-300"
+            >
+              <span className="text-lg leading-none">←</span>
+              <span>ホームに戻る</span>
+            </Link>
+          </div>
+
           <div className="flex items-center justify-between gap-3">
             <div className="space-y-3">
               <div className="inline-flex items-center gap-2 rounded-full border border-fuchsia-500/40 bg-fuchsia-500/10 px-3 py-1 text-xs font-medium text-fuchsia-200">
@@ -133,15 +138,6 @@ export default function ColosseumPage() {
                 ランク戦ではスコアが Copeers に反映されます。
               </p>
             </div>
-
-            {/* ホームに戻るボタン */}
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900/70 px-3 py-2 text-xs font-medium text-slate-200 transition hover:border-slate-500 hover:bg-slate-800"
-            >
-              <span className="text-sm">⌂</span>
-              <span>ホームに戻る</span>
-            </Link>
           </div>
         </header>
 

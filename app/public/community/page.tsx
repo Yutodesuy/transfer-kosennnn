@@ -5,13 +5,16 @@ export default function CommunityPage() {
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50">
       <div className="mx-auto max-w-5xl px-4 py-12 space-y-12">
-        {/* 戻るボタン */}
-        <Link
-          href="/"
-          className="inline-flex items-center text-xs text-slate-400 hover:text-slate-200"
-        >
-          ← ホームに戻る
-        </Link>
+        {/* ホームへの導線だけ置く */}
+        <div className="mb-6">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900/70 px-4 py-1.5 text-xs font-medium text-slate-300 transition hover:border-fuchsia-500 hover:text-fuchsia-300"
+          >
+            <span className="text-lg leading-none">←</span>
+            <span>ホームに戻る</span>
+          </Link>
+        </div>
 
         {/* タイトル */}
         <section>
@@ -22,7 +25,7 @@ export default function CommunityPage() {
             「高専から編入せよ！」は、高専生の学習と挑戦を支えるコミュニティです。
             特にオンライン塾
             <span className="font-semibold text-slate-100"> テクノゼミ </span>
-            と連携し、編入数学・物理・情報の学習から進路支援まで、一貫してサポートします。
+            と連携し、編入のための学習から進路支援まで、一貫してサポートします。
           </p>
         </section>
 
@@ -35,9 +38,9 @@ export default function CommunityPage() {
             テクノゼミは、高専生の「編入学」を圧倒的に近道にするための
             オンライン学習ゼミです。
             授業は編入試験に直結する
-            <span className="font-semibold text-slate-100"> 数学・物理・情報 </span>
-            の3本柱に特化し、専門の講師によるライブ授業・添削・模試を通して
-            「説明できる理解」を身につけることを重視しています。
+            <span className="font-semibold text-slate-100"> 編入のための</span>
+            学習に特化し、専門の講師によるマンツーマン授業や模試を通して
+            質の高い知識を身につけることを重視しています。
           </p>
           <p className="mt-2 text-sm text-slate-300 leading-relaxed">
             また、全国の高専生とつながるコミュニティとして、
@@ -73,11 +76,7 @@ export default function CommunityPage() {
               <span className="text-slate-100 font-semibold"> 演習ページ（practice）</span>
               のフルアクセス
             </li>
-            <li>
-              ・編入数学／物理の
-              <span className="text-slate-100 font-semibold"> 模試（mock）</span>
-              をオンライン受験可能
-            </li>
+            
             <li>
               ・講師による
               <span className="text-slate-100 font-semibold"> 解説の添削・フィードバック優先権</span>

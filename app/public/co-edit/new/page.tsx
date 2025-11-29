@@ -42,6 +42,51 @@ const initialMarkdown = `# 問題タイトル（例：極限と微分の「0/0�
 2. 他の問題でも使える視点
 3. 後輩に一言メッセージがあるとなお良いです。`;
 
+// 教科・単元の候補
+const subjects = [
+  { value: "math", label: "数学" },
+  { value: "physics", label: "物理" },
+  { value: "chemistry", label: "化学" },
+  { value: "cs", label: "情報" },
+  { value: "essay", label: "小論文" },
+];
+
+const topicsBySubject: Record<string, { value: string; label: string }[]> = {
+  math: [
+    { value: "linear_algebra", label: "線形代数" },
+    { value: "fourier", label: "フーリエ解析" },
+    { value: "calculus", label: "微分積分" },
+    { value: "complex", label: "複素解析" },
+    { value: "probability", label: "確率" },
+  ],
+  physics: [
+    { value: "mechanics", label: "力学" },
+    { value: "thermodynamics", label: "熱力学" },
+    { value: "electromagnetics", label: "電磁気学" },
+    { value: "materials", label: "材料力学" },
+    { value: "waves", label: "波動" },
+  ],
+  chemistry: [
+    { value: "inorganic", label: "無機化学" },
+    { value: "organic", label: "有機化学" },
+    { value: "physical", label: "物理化学" },
+    { value: "analytical", label: "分析化学" },
+  ],
+  cs: [
+    { value: "network", label: "コンピュータネットワーク" },
+    { value: "algorithms", label: "アルゴリズムとデータ構造" },
+    { value: "os", label: "オペレーティングシステム" },
+    { value: "security", label: "情報セキュリティ" },
+    { value: "database", label: "データベース" },
+  ],
+  essay: [
+    { value: "society", label: "社会・時事" },
+    { value: "sci_tech", label: "科学技術" },
+    { value: "ethics", label: "倫理・価値観" },
+    { value: "education", label: "教育・学び" },
+  ],
+};
+
 function renderMarkdown(md: string) {
   const blocks = md.split("\n\n");
 
@@ -133,10 +178,33 @@ export default function CoEditNewPage() {
   const [markdown, setMarkdown] = useState(initialMarkdown);
   const [fullscreen, setFullscreen] = useState(false);
 
+  // 新しく追加するステート
+  const [reviewerCount, setReviewerCount] = useState<number | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [subject, setSubject] = useState<string>("math");
+  const [topic, setTopic] = useState<string>("");
+
+  const currentTopics = topicsBySubject[subject] ?? [];
+
   const handleSubmit = () => {
     console.log("投稿内容（Markdown）:", markdown);
+    console.log("添削依頼人数:", reviewerCount);
+    console.log("教科:", subject);
+    console.log("単元:", topic);
+    console.log("画像ファイル:", imageFile);
+
     alert(
-      "今はデモ版なので、実際の投稿はまだ実装していません。\nでも、この内容で「添削お願い」投稿がされるイメージです！"
+      "今はデモ版なので、実際の投稿はまだ実装していません。\n\n" +
+        "▼ 送信されるイメージ\n" +
+        `・Markdown解説\n` +
+        `・添削依頼人数: ${reviewerCount ?? "未選択"}人\n` +
+        `・教科: ${
+          subjects.find((s) => s.value === subject)?.label ?? "未選択"
+        }\n` +
+        `・単元: ${
+          currentTopics.find((t) => t.value === topic)?.label ?? "未選択"
+        }\n` +
+        `・画像: ${imageFile ? imageFile.name : "なし"}`
     );
   };
 
@@ -211,7 +279,7 @@ export default function CoEditNewPage() {
                 }`}
                 title={fullscreen ? "全画面を閉じる" : "全画面表示にする"}
               >
-                {/* フルスクリーン風アイコン（画像のイメージ） */}
+                {/* フルスクリーン風アイコン */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -234,7 +302,138 @@ export default function CoEditNewPage() {
               }`}
               style={fullscreen ? { height: "calc(100vh - 96px)" } : undefined}
             >
+              {/* ▼ ここが追加した「高専から編入せよ！」ヘッダバナー */}
+              <div className="mb-4 rounded-xl border border-slate-200 bg-slate-950 px-4 py-3 text-slate-50">
+                <div className="flex items-baseline justify-between gap-3">
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-fuchsia-300">
+                      co-study platform
+                    </p>
+                    <p className="text-sm font-bold tracking-wide">
+                      高専から編入せよ！
+                    </p>
+                  </div>
+                  <span className="text-[10px] text-slate-300">
+                    解説プレビュー
+                  </span>
+                </div>
+              </div>
+
+              {/* ▼ ここから先が実際のMarkdownプレビュー */}
               {renderMarkdown(markdown)}
+            </div>
+          </div>
+        </section>
+
+        {/* ▼ Markdown解説の下に追加するエリア */}
+        <section className="mt-4 space-y-4 rounded-2xl border border-slate-800 bg-slate-900/80 p-4">
+          <h2 className="text-sm font-semibold text-slate-100">
+            📌 添削リクエスト設定
+          </h2>
+
+          {/* 添削依頼人数（2〜5人） */}
+          <div className="space-y-1">
+            <p className="text-xs font-medium text-slate-300">
+              添削依頼人数{" "}
+              <span className="text-[11px] text-slate-500">(2〜5人から選択)</span>
+            </p>
+            <div className="flex flex-wrap gap-4">
+              {[2, 3, 4, 5].map((n) => (
+                <label
+                  key={n}
+                  className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-slate-600 bg-slate-950/60 px-3 py-1 text-xs text-slate-100 transition hover:border-fuchsia-500"
+                >
+                  <input
+                    type="checkbox"
+                    className="h-4 w-4 rounded border-slate-500 bg-slate-900 text-fuchsia-500"
+                    checked={reviewerCount === n}
+                    onChange={() =>
+                      setReviewerCount((prev) => (prev === n ? null : n))
+                    }
+                  />
+                  <span>{n}人に添削してほしい</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* 問題の画像アップロード（1枚まで） */}
+          <div className="space-y-1">
+            <p className="text-xs font-medium text-slate-300">
+              問題画像のアップロード{" "}
+              <span className="text-[11px] text-slate-500">(1枚まで)</span>
+            </p>
+
+            <div className="flex items-center gap-3">
+              <input
+                id="problem-image"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0] ?? null;
+                  setImageFile(file);
+                }}
+              />
+              <label
+                htmlFor="problem-image"
+                className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-slate-600 bg-slate-950/70 px-4 py-1.5 text-xs font-medium text-slate-100 transition hover:border-fuchsia-500 hover:text-fuchsia-200"
+              >
+                <span>🖼 画像を選ぶ</span>
+              </label>
+
+              {imageFile && (
+                <p className="text-xs text-slate-400">
+                  選択中: <span className="font-medium">{imageFile.name}</span>
+                </p>
+              )}
+              {!imageFile && (
+                <p className="text-xs text-slate-500">
+                  例）ホワイトボードに書いた問題をスマホで撮影した画像など
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* 教科・単元選択 */}
+          <div className="grid gap-4 md:grid-cols-2">
+            {/* 教科 */}
+            <div className="space-y-1">
+              <p className="text-xs font-medium text-slate-300">教科</p>
+              <select
+                className="w-full rounded-lg border border-slate-600 bg-slate-950/80 px-3 py-2 text-xs text-slate-100 outline-none focus:border-fuchsia-500 focus:ring-1 focus:ring-fuchsia-500"
+                value={subject}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setSubject(value);
+                  setTopic("");
+                }}
+              >
+                {subjects.map((s) => (
+                  <option key={s.value} value={s.value}>
+                    {s.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* 単元 */}
+            <div className="space-y-1">
+              <p className="text-xs font-medium text-slate-300">単元</p>
+              <select
+                className="w-full rounded-lg border border-slate-600 bg-slate-950/80 px-3 py-2 text-xs text-slate-100 outline-none focus:border-fuchsia-500 focus:ring-1 focus:ring-fuchsia-500"
+                value={topic}
+                onChange={(e) => setTopic(e.target.value)}
+              >
+                <option value="" disabled>
+                  単元を選択
+                </option>
+                {currentTopics.map((t) => (
+                  <option key={t.value} value={t.value}>
+                    {t.label}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
         </section>
