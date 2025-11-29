@@ -492,6 +492,148 @@ export default function ProblemsPage() {
             </div>
           )}
         </section>
+
+        {/* ============================= */}
+        {/* 殿堂の知識 - Hall of Knowledge */}
+        {/* ============================= */}
+        <section className="mt-16 border-t border-slate-800 pt-10">
+          <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+            <div>
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-50">
+                殿堂の知識 — Hall of Knowledge
+              </h2>
+              <p className="mt-2 max-w-2xl text-sm text-slate-300">
+                解法アリーナで生まれた解説の中から、特に優秀なものだけをノミネートし、
+                教科ごとに「本」のかたちで構造的に整理したコーナーです。
+                ここを辿ることで、編入レベルの知識を体系的に復習できます。
+              </p>
+            </div>
+            <p className="text-[11px] text-slate-500">
+              ※ 運営および先輩コピアによる審査を経て、
+              「殿堂入り」した解説だけが収録されます。
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* 数学の本 */}
+            <Link
+              href="/public/problems/book_math"
+              className="group relative flex flex-col justify-between rounded-2xl border border-indigo-400/40 bg-gradient-to-br from-indigo-700 via-indigo-800 to-slate-950 p-5 shadow-[0_18px_45px_rgba(15,23,42,0.7)] overflow-hidden hover:-translate-y-1 hover:shadow-[0_22px_55px_rgba(30,64,175,0.8)] transition-transform duration-200"
+            >
+              {/* 背表紙 */}
+              <div className="pointer-events-none absolute inset-y-0 left-0 w-3 bg-gradient-to-b from-indigo-200/90 via-indigo-100/70 to-indigo-300/80 shadow-[8px_0_18px_rgba(15,23,42,0.7)]" />
+              {/* 装飾 */}
+              <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-indigo-400/20 blur-3xl" />
+
+              <div className="relative pl-4">
+                <p className="text-[11px] uppercase tracking-[0.2em] text-indigo-200/80">
+                  Math Hall
+                </p>
+                <h3 className="mt-1 text-lg font-bold text-white tracking-wide">
+                  数学の殿堂
+                </h3>
+                <p className="mt-2 text-xs text-indigo-100/90 leading-relaxed">
+                  極限・微積・線形代数・複素解析・確率統計など、
+                  編入数学で戦うための「ここでしか読めない解説」を一冊に。
+                </p>
+              </div>
+
+              <div className="relative mt-4 flex items-center justify-between pl-4 text-[11px] text-indigo-100/80">
+                <span>章立てで本のように読み進める</span>
+                <span className="font-semibold group-hover:translate-x-1 transition-transform">
+                  → 本を開く
+                </span>
+              </div>
+            </Link>
+
+            {/* 物理の本 */}
+            <Link
+              href="/hall/physics"
+              className="group relative flex flex-col justify-between rounded-2xl border border-rose-400/40 bg-gradient-to-br from-rose-700 via-rose-800 to-slate-950 p-5 shadow-[0_18px_45px_rgba(15,23,42,0.7)] overflow-hidden hover:-translate-y-1 hover:shadow-[0_22px_55px_rgba(190,24,93,0.8)] transition-transform duration-200"
+            >
+              <div className="pointer-events-none absolute inset-y-0 left-0 w-3 bg-gradient-to-b from-rose-100/90 via-rose-50/70 to-rose-200/80 shadow-[8px_0_18px_rgba(15,23,42,0.7)]" />
+              <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-rose-400/20 blur-3xl" />
+
+              <div className="relative pl-4">
+                <p className="text-[11px] uppercase tracking-[0.2em] text-rose-100/80">
+                  Physics Hall
+                </p>
+                <h3 className="mt-1 text-lg font-bold text-white tracking-wide">
+                  物理の殿堂
+                </h3>
+                <p className="mt-2 text-xs text-rose-50/95 leading-relaxed">
+                  力学・電磁気・熱力学・波動・量子力学の発展問題を、
+                  思考プロセスから丁寧に読み解ける一冊。
+                </p>
+              </div>
+
+              <div className="relative mt-4 flex items-center justify-between pl-4 text-[11px] text-rose-50/90">
+                <span>図やエネルギー線で直感から理解する</span>
+                <span className="font-semibold group-hover:translate-x-1 transition-transform">
+                  → 本を開く
+                </span>
+              </div>
+            </Link>
+
+            {/* 情報の本 */}
+            <Link
+              href="/hall/information"
+              className="group relative flex flex-col justify-between rounded-2xl border border-emerald-400/40 bg-gradient-to-br from-emerald-700 via-emerald-800 to-slate-950 p-5 shadow-[0_18px_45px_rgba(15,23,42,0.7)] overflow-hidden hover:-translate-y-1 hover:shadow-[0_22px_55px_rgba(16,185,129,0.8)] transition-transform duration-200"
+            >
+              <div className="pointer-events-none absolute inset-y-0 left-0 w-3 bg-gradient-to-b from-emerald-100/90 via-emerald-50/70 to-emerald-200/80 shadow-[8px_0_18px_rgba(15,23,42,0.7)]" />
+              <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-emerald-400/20 blur-3xl" />
+
+              <div className="relative pl-4">
+                <p className="text-[11px] uppercase tracking-[0.2em] text-emerald-100/80">
+                  Information Hall
+                </p>
+                <h3 className="mt-1 text-lg font-bold text-white tracking-wide">
+                  情報の殿堂
+                </h3>
+                <p className="mt-2 text-xs text-emerald-50/95 leading-relaxed">
+                  アルゴリズム、計算量、ネットワーク、セキュリティなど、
+                  高専情報系の「ガチ解説」を体系的に読み込める本棚。
+                </p>
+              </div>
+
+              <div className="relative mt-4 flex items-center justify-between pl-4 text-[11px] text-emerald-50/90">
+                <span>NAT / ルーティング / 暗号なども収録</span>
+                <span className="font-semibold group-hover:translate-x-1 transition-transform">
+                  → 本を開く
+                </span>
+              </div>
+            </Link>
+
+            {/* 英語の本 */}
+            <Link
+              href="/hall/english"
+              className="group relative flex flex-col justify-between rounded-2xl border border-cyan-400/40 bg-gradient-to-br from-cyan-700 via-cyan-800 to-slate-950 p-5 shadow-[0_18px_45px_rgba(15,23,42,0.7)] overflow-hidden hover:-translate-y-1 hover:shadow-[0_22px_55px_rgba(8,145,178,0.8)] transition-transform duration-200"
+            >
+              <div className="pointer-events-none absolute inset-y-0 left-0 w-3 bg-gradient-to-b from-cyan-100/90 via-cyan-50/70 to-cyan-200/80 shadow-[8px_0_18px_rgba(15,23,42,0.7)]" />
+              <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-cyan-400/20 blur-3xl" />
+
+              <div className="relative pl-4">
+                <p className="text-[11px] uppercase tracking-[0.2em] text-cyan-100/80">
+                  English Hall
+                </p>
+                <h3 className="mt-1 text-lg font-bold text-white tracking-wide">
+                  英語の殿堂
+                </h3>
+                <p className="mt-2 text-xs text-cyan-50/95 leading-relaxed">
+                  編入長文、専門英語、和訳・英作文の
+                  「解説の質で殴る系」だけを集めたブックレット。
+                </p>
+              </div>
+
+              <div className="relative mt-4 flex items-center justify-between pl-4 text-[11px] text-cyan-50/90">
+                <span>情報系・工学系の英文読解に特化</span>
+                <span className="font-semibold group-hover:translate-x-1 transition-transform">
+                  → 本を開く
+                </span>
+              </div>
+            </Link>
+          </div>
+        </section>
       </div>
     </div>
   );
