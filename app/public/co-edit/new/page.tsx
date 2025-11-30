@@ -4,6 +4,19 @@
 import { useState } from "react";
 import Link from "next/link";
 
+// ▼ Markdown を HTML に変換する
+import ReactMarkdown from "react-markdown";
+import type { Components } from "react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
+
+// ▼ カスタム Markdown 変換
+import {
+  transformColors,
+  transformDirectives,
+} from "@/app/_utils/markdown";
+
+// ▼ 初期テンプレート
 const initialMarkdown = `# 問題タイトル（例：極限と微分の「0/0」の本質を押さえる問題）
 
 ## 問題のねらい
@@ -28,10 +41,13 @@ const initialMarkdown = `# 問題タイトル（例：極限と微分の「0/0�
 
 ### 3. ここが本質！
 
-- 公式の丸暗記ではなく、なぜそうなるのか
-- 他の問題にも応用できる視点
+:::note
+ここは注意ポイントの説明！
+:::
 
-などを書いてみましょう。
+:::info
+補足説明や追加情報を書くときはこちら！
+:::
 
 ## よくあるミス
 - 例：0/0 型になった瞬間に「極限は存在しない」と決めつけてしまう。
@@ -40,178 +56,72 @@ const initialMarkdown = `# 問題タイトル（例：極限と微分の「0/0�
 ## ポイントのまとめ
 1. この問題で一番大事な一文
 2. 他の問題でも使える視点
-3. 後輩に一言メッセージがあるとなお良いです。`;
+3. 後輩に一言メッセージがあるとなお良いです。
+`;
 
-// 教科・単元の候補
-const subjects = [
-  { value: "math", label: "数学" },
-  { value: "physics", label: "物理" },
-  { value: "chemistry", label: "化学" },
-  { value: "cs", label: "情報" },
-  { value: "essay", label: "小論文" },
-];
-
-const topicsBySubject: Record<string, { value: string; label: string }[]> = {
-  math: [
-    { value: "linear_algebra", label: "線形代数" },
-    { value: "fourier", label: "フーリエ解析" },
-    { value: "calculus", label: "微分積分" },
-    { value: "complex", label: "複素解析" },
-    { value: "probability", label: "確率" },
-  ],
-  physics: [
-    { value: "mechanics", label: "力学" },
-    { value: "thermodynamics", label: "熱力学" },
-    { value: "electromagnetics", label: "電磁気学" },
-    { value: "materials", label: "材料力学" },
-    { value: "waves", label: "波動" },
-  ],
-  chemistry: [
-    { value: "inorganic", label: "無機化学" },
-    { value: "organic", label: "有機化学" },
-    { value: "physical", label: "物理化学" },
-    { value: "analytical", label: "分析化学" },
-  ],
-  cs: [
-    { value: "network", label: "コンピュータネットワーク" },
-    { value: "algorithms", label: "アルゴリズムとデータ構造" },
-    { value: "os", label: "オペレーティングシステム" },
-    { value: "security", label: "情報セキュリティ" },
-    { value: "database", label: "データベース" },
-  ],
-  essay: [
-    { value: "society", label: "社会・時事" },
-    { value: "sci_tech", label: "科学技術" },
-    { value: "ethics", label: "倫理・価値観" },
-    { value: "education", label: "教育・学び" },
-  ],
+// ▼ Markdown内の h1/h2/h3 などのスタイルを明示的に指定
+const markdownComponents: Components = {
+  h1: ({ node, ...props }) => (
+    <h1
+      className="mt-6 mb-3 text-2xl font-bold text-slate-900"
+      {...props}
+    />
+  ),
+  h2: ({ node, ...props }) => (
+    <h2
+      className="mt-5 mb-2 text-xl font-semibold text-slate-900 border-b border-slate-200 pb-1"
+      {...props}
+    />
+  ),
+  h3: ({ node, ...props }) => (
+    <h3
+      className="mt-4 mb-1.5 text-lg font-semibold text-slate-900"
+      {...props}
+    />
+  ),
+  p: ({ node, ...props }) => (
+    <p className="mb-3 text-sm leading-relaxed text-slate-900" {...props} />
+  ),
+  ul: ({ node, ...props }) => (
+    <ul className="mb-3 list-disc pl-5 text-sm text-slate-900" {...props} />
+  ),
+  ol: ({ node, ...props }) => (
+    <ol className="mb-3 list-decimal pl-5 text-sm text-slate-900" {...props} />
+  ),
+  li: ({ node, ...props }) => <li className="mb-1" {...props} />,
+  strong: ({ node, ...props }) => (
+    <strong className="font-semibold text-slate-900" {...props} />
+  ),
 };
-
-function renderMarkdown(md: string) {
-  const blocks = md.split("\n\n");
-
-  return blocks.map((block, idx) => {
-    // 見出し level 1
-    if (block.startsWith("# ")) {
-      const text = block.replace(/^# /, "");
-      return (
-        <h1
-          key={idx}
-          className="mt-4 mb-2 border-b border-gray-300 pb-1 text-2xl font-bold text-black"
-        >
-          {text}
-        </h1>
-      );
-    }
-
-    // 見出し level 2
-    if (block.startsWith("## ")) {
-      const text = block.replace(/^## /, "");
-      return (
-        <h2
-          key={idx}
-          className="mt-4 mb-2 text-xl font-semibold text-black"
-        >
-          {text}
-        </h2>
-      );
-    }
-
-    // 見出し level 3
-    if (block.startsWith("### ")) {
-      const text = block.replace(/^### /, "");
-      return (
-        <h3
-          key={idx}
-          className="mt-3 mb-1 text-lg font-semibold text-black"
-        >
-          {text}
-        </h3>
-      );
-    }
-
-    // 箇条書き
-    if (block.trim().startsWith("- ")) {
-      const lines = block.split("\n").filter((l) => l.trim().startsWith("- "));
-      return (
-        <ul
-          key={idx}
-          className="my-2 list-disc list-inside space-y-1 text-sm text-black"
-        >
-          {lines.map((line, i) => (
-            <li key={i}>{line.replace(/^- /, "")}</li>
-          ))}
-        </ul>
-      );
-    }
-
-    // 番号付きリスト
-    if (block.trim().match(/^[0-9]+\. /)) {
-      const lines = block
-        .split("\n")
-        .filter((l) => l.trim().match(/^[0-9]+\. /));
-      return (
-        <ol
-          key={idx}
-          className="my-2 list-decimal list-inside space-y-1 text-sm text-black"
-        >
-          {lines.map((line, i) => (
-            <li key={i}>{line.replace(/^[0-9]+\. /, "")}</li>
-          ))}
-        </ol>
-      );
-    }
-
-    // 通常テキスト
-    return (
-      <p
-        key={idx}
-        className="my-2 whitespace-pre-wrap text-sm leading-relaxed text-black"
-      >
-        {block}
-      </p>
-    );
-  });
-}
 
 export default function CoEditNewPage() {
   const [markdown, setMarkdown] = useState(initialMarkdown);
   const [fullscreen, setFullscreen] = useState(false);
 
-  // 新しく追加するステート
+  // ▼ 投稿データ（簡易版）
   const [reviewerCount, setReviewerCount] = useState<number | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [subject, setSubject] = useState<string>("math");
   const [topic, setTopic] = useState<string>("");
 
-  const currentTopics = topicsBySubject[subject] ?? [];
+  // ▼ Markdown 変換処理（note/info + 色つきテキスト）
+  const transformed = transformColors(transformDirectives(markdown));
 
   const handleSubmit = () => {
-    console.log("投稿内容（Markdown）:", markdown);
-    console.log("添削依頼人数:", reviewerCount);
-    console.log("教科:", subject);
-    console.log("単元:", topic);
-    console.log("画像ファイル:", imageFile);
-
     alert(
-      "今はデモ版なので、実際の投稿はまだ実装していません。\n\n" +
-        "▼ 送信されるイメージ\n" +
-        `・Markdown解説\n` +
-        `・添削依頼人数: ${reviewerCount ?? "未選択"}人\n` +
-        `・教科: ${
-          subjects.find((s) => s.value === subject)?.label ?? "未選択"
-        }\n` +
-        `・単元: ${
-          currentTopics.find((t) => t.value === topic)?.label ?? "未選択"
-        }\n` +
-        `・画像: ${imageFile ? imageFile.name : "なし"}`
+      "今はデモ版なので投稿は保存されません。\n\n" +
+        "以下の内容が送信される想定です：\n" +
+        `・添削人数: ${reviewerCount ?? "未選択"}\n` +
+        `・教科: ${subject}\n` +
+        `・単元: ${topic}\n` +
+        `・画像: ${imageFile?.name ?? "なし"}`
     );
   };
 
   return (
     <main className="relative min-h-screen bg-slate-950 py-8 px-4 text-slate-50">
       <div className="mx-auto max-w-6xl space-y-6 pb-24">
-        {/* 上部：戻る導線＋タイトル */}
+        {/* 上部：戻る導線 */}
         <div className="flex items-center justify-between">
           <Link
             href="/public/co-edit"
@@ -226,60 +136,43 @@ export default function CoEditNewPage() {
           </span>
         </div>
 
+        {/* タイトル */}
         <header className="space-y-1">
           <h1 className="text-2xl font-bold">Co-Edit Editor</h1>
           <p className="text-sm text-slate-400">
-            左側でマークダウン形式で解説を書き、右側でプレビューを確認できます。
+            左側で Markdown を入力し、右側でリアルタイムプレビューを確認できます。
           </p>
         </header>
 
-        {/* メイン：2カラム（入力 / プレビュー） */}
+        {/* 2カラム（入力 / プレビュー） */}
         <section className="grid gap-6 md:grid-cols-2">
-          {/* 左：Markdown入力 */}
+          {/* 左：Markdown 入力欄 */}
           <div className="flex flex-col rounded-2xl border border-slate-800 bg-slate-900/70 p-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-sm font-semibold text-slate-100">
-                ✍️ 解説入力（Markdown）
-              </h2>
-              <span className="text-[11px] text-slate-500">
-                テンプレは自由に書き換えてOK
-              </span>
-            </div>
+            <h2 className="text-sm font-semibold text-slate-100">
+              ✍️ 解説入力（Markdown）
+            </h2>
 
             <textarea
-              className="mt-3 h-[70vh] w-full flex-1 resize-none rounded-xl border border-slate-700 bg-slate-950/80 px-3 py-2 text-sm text-slate-100 outline-none ring-0 focus:border-fuchsia-500 focus:ring-1 focus:ring-fuchsia-500"
+              className="mt-3 h-[70vh] w-full flex-1 resize-none rounded-xl border border-slate-700 bg-slate-950/80 px-3 py-2 text-sm text-slate-100 outline-none focus:border-fuchsia-500 focus:ring-1 focus:ring-fuchsia-500"
               value={markdown}
               onChange={(e) => setMarkdown(e.target.value)}
             />
           </div>
 
-          {/* 右：プレビュー（白背景＋黒文字・全画面対応） */}
-          <div
-            className={`flex flex-col border border-slate-800 bg-slate-900/70 p-4 transition ${
-              fullscreen
-                ? "fixed inset-0 z-50 m-0 rounded-none bg-white text-black"
-                : "rounded-2xl"
-            }`}
-          >
+          {/* 右：プレビュー表示（通常） */}
+          <div className="flex flex-col rounded-2xl border border-slate-800 bg-slate-900/70 p-4">
             <div className="flex items-center justify-between">
-              <h2
-                className={`text-sm font-semibold ${
-                  fullscreen ? "text-black" : "text-slate-100"
-                }`}
-              >
+              <h2 className="text-sm font-semibold text-slate-100">
                 👀 プレビュー
               </h2>
 
-              {/* 全画面トグルボタン */}
+              {/* 全画面トグル */}
               <button
-                type="button"
-                onClick={() => setFullscreen((prev) => !prev)}
-                className={`rounded-full p-1.5 text-slate-300 transition hover:text-fuchsia-500 ${
-                  fullscreen ? "hover:bg-slate-200" : "hover:bg-slate-800"
-                }`}
-                title={fullscreen ? "全画面を閉じる" : "全画面表示にする"}
+                onClick={() => setFullscreen(true)}
+                className="rounded-full p-1.5 text-slate-300 transition hover:bg-slate-800"
+                aria-label="全画面でプレビュー"
               >
-                {/* フルスクリーン風アイコン */}
+                {/* 拡大アイコン */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -296,15 +189,11 @@ export default function CoEditNewPage() {
               </button>
             </div>
 
-            <div
-              className={`mt-3 flex-1 overflow-auto rounded-xl border border-gray-300 bg-white px-4 py-3 text-black ${
-                fullscreen ? "" : "h-[70vh]"
-              }`}
-              style={fullscreen ? { height: "calc(100vh - 96px)" } : undefined}
-            >
-              {/* ▼ ここが追加した「高専から編入せよ！」ヘッダバナー */}
+            {/* プレビュー本体 */}
+            <div className="mt-3 h-[70vh] overflow-auto rounded-xl border border-gray-300 bg-white px-4 py-3 text-black">
+              {/* ヘッダー（プレビュー用） */}
               <div className="mb-4 rounded-xl border border-slate-200 bg-slate-950 px-4 py-3 text-slate-50">
-                <div className="flex items-baseline justify-between gap-3">
+                <div className="flex items-baseline justify-between">
                   <div>
                     <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-fuchsia-300">
                       co-study platform
@@ -319,50 +208,49 @@ export default function CoEditNewPage() {
                 </div>
               </div>
 
-              {/* ▼ ここから先が実際のMarkdownプレビュー */}
-              {renderMarkdown(markdown)}
+              {/* Markdown → HTML */}
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                rehypePlugins={[rehypeRaw]}
+                components={markdownComponents}
+              >
+                {transformed}
+              </ReactMarkdown>
             </div>
           </div>
         </section>
 
-        {/* ▼ Markdown解説の下に追加するエリア */}
+        {/* 追加設定エリア（添削人数 / 画像 / 教科など） */}
         <section className="mt-4 space-y-4 rounded-2xl border border-slate-800 bg-slate-900/80 p-4">
           <h2 className="text-sm font-semibold text-slate-100">
             📌 添削リクエスト設定
           </h2>
 
-          {/* 添削依頼人数（2〜5人） */}
+          {/* 添削依頼人数 */}
           <div className="space-y-1">
-            <p className="text-xs font-medium text-slate-300">
-              添削依頼人数{" "}
-              <span className="text-[11px] text-slate-500">(2〜5人から選択)</span>
-            </p>
-            <div className="flex flex-wrap gap-4">
+            <p className="text-xs font-medium text-slate-300">添削依頼人数</p>
+            <div className="flex flex-wrap gap-3">
               {[2, 3, 4, 5].map((n) => (
                 <label
                   key={n}
-                  className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-slate-600 bg-slate-950/60 px-3 py-1 text-xs text-slate-100 transition hover:border-fuchsia-500"
+                  className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-slate-600 bg-slate-950/60 px-3 py-1 text-xs text-slate-100 hover:border-fuchsia-500"
                 >
                   <input
                     type="checkbox"
-                    className="h-4 w-4 rounded border-slate-500 bg-slate-900 text-fuchsia-500"
                     checked={reviewerCount === n}
                     onChange={() =>
                       setReviewerCount((prev) => (prev === n ? null : n))
                     }
                   />
-                  <span>{n}人に添削してほしい</span>
+                  {n}人に添削してほしい
                 </label>
               ))}
             </div>
           </div>
 
-          {/* 問題の画像アップロード（1枚まで） */}
+          {/* 画像アップロード */}
           <div className="space-y-1">
-            <p className="text-xs font-medium text-slate-300">
-              問題画像のアップロード{" "}
-              <span className="text-[11px] text-slate-500">(1枚まで)</span>
-            </p>
+            <p className="text-xs font-medium text-slate-300">問題画像</p>
 
             <div className="flex items-center gap-3">
               <input
@@ -370,83 +258,128 @@ export default function CoEditNewPage() {
                 type="file"
                 accept="image/*"
                 className="hidden"
-                onChange={(e) => {
-                  const file = e.target.files?.[0] ?? null;
-                  setImageFile(file);
-                }}
+                onChange={(e) => setImageFile(e.target.files?.[0] ?? null)}
               />
               <label
                 htmlFor="problem-image"
-                className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-slate-600 bg-slate-950/70 px-4 py-1.5 text-xs font-medium text-slate-100 transition hover:border-fuchsia-500 hover:text-fuchsia-200"
+                className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-slate-600 bg-slate-950/70 px-4 py-1.5 text-xs font-medium text-slate-100 hover:border-fuchsia-500 hover:text-fuchsia-200"
               >
-                <span>🖼 画像を選ぶ</span>
+                🖼 画像を選ぶ
               </label>
 
-              {imageFile && (
+              {imageFile ? (
                 <p className="text-xs text-slate-400">
-                  選択中: <span className="font-medium">{imageFile.name}</span>
+                  選択中:{" "}
+                  <span className="font-medium">{imageFile.name}</span>
                 </p>
-              )}
-              {!imageFile && (
+              ) : (
                 <p className="text-xs text-slate-500">
-                  例）ホワイトボードに書いた問題をスマホで撮影した画像など
+                  例）ホワイトボードをスマホで撮影した画像など
                 </p>
               )}
             </div>
           </div>
 
-          {/* 教科・単元選択 */}
+          {/* 教科・単元（簡易版） */}
           <div className="grid gap-4 md:grid-cols-2">
-            {/* 教科 */}
-            <div className="space-y-1">
+            <div>
               <p className="text-xs font-medium text-slate-300">教科</p>
               <select
-                className="w-full rounded-lg border border-slate-600 bg-slate-950/80 px-3 py-2 text-xs text-slate-100 outline-none focus:border-fuchsia-500 focus:ring-1 focus:ring-fuchsia-500"
+                className="w-full rounded-lg border border-slate-600 bg-slate-950/80 px-3 py-2 text-xs text-slate-100"
                 value={subject}
                 onChange={(e) => {
-                  const value = e.target.value;
-                  setSubject(value);
+                  setSubject(e.target.value);
                   setTopic("");
                 }}
               >
-                {subjects.map((s) => (
-                  <option key={s.value} value={s.value}>
-                    {s.label}
-                  </option>
-                ))}
+                <option value="math">数学</option>
+                <option value="physics">物理</option>
+                <option value="chemistry">化学</option>
+                <option value="cs">情報</option>
+                <option value="essay">小論文</option>
               </select>
             </div>
 
-            {/* 単元 */}
-            <div className="space-y-1">
+            <div>
               <p className="text-xs font-medium text-slate-300">単元</p>
-              <select
-                className="w-full rounded-lg border border-slate-600 bg-slate-950/80 px-3 py-2 text-xs text-slate-100 outline-none focus:border-fuchsia-500 focus:ring-1 focus:ring-fuchsia-500"
+              <input
+                className="w-full rounded-lg border border-slate-600 bg-slate-950/80 px-3 py-2 text-xs text-slate-100"
+                placeholder="例）線形代数、電磁気学、ネットワーク..."
                 value={topic}
                 onChange={(e) => setTopic(e.target.value)}
-              >
-                <option value="" disabled>
-                  単元を選択
-                </option>
-                {currentTopics.map((t) => (
-                  <option key={t.value} value={t.value}>
-                    {t.label}
-                  </option>
-                ))}
-              </select>
+              />
             </div>
           </div>
         </section>
       </div>
 
-      {/* 右下：投稿ボタン */}
+      {/* 投稿ボタン */}
       <button
-        type="button"
         onClick={handleSubmit}
-        className="fixed bottom-6 right-6 inline-flex items-center gap-2 rounded-full bg-fuchsia-600 px-6 py-3 text-sm font-semibold text-slate-50 shadow-lg shadow-fuchsia-500/40 transition hover:bg-fuchsia-700 hover:shadow-fuchsia-500/60 active:scale-95"
+        className="fixed bottom-6 right-6 inline-flex items-center gap-2 rounded-full bg-fuchsia-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-fuchsia-500/40 hover:bg-fuchsia-700 hover:shadow-fuchsia-500/60"
       >
-        <span>📤 投稿（添削お願い）をする</span>
+        📤 投稿（添削お願い）
       </button>
+
+      {/* 全画面プレビュー：オーバーレイ */}
+      {fullscreen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+          <div className="relative flex h-[90vh] w-[min(960px,100%-2rem)] flex-col rounded-2xl bg-white p-4 text-black shadow-2xl">
+            {/* 上部ヘッダー */}
+            <div className="flex items-center justify-between">
+              <h2 className="text-sm font-semibold">👀 全画面プレビュー</h2>
+              <button
+                onClick={() => setFullscreen(false)}
+                className="rounded-full p-1.5 text-slate-700 transition hover:bg-slate-200"
+                aria-label="全画面プレビューを閉じる"
+              >
+                {/* 閉じる（縮小）アイコン */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  className="h-5 w-5"
+                >
+                  <path d="M5 9V5h4" />
+                  <path d="M19 9V5h-4" />
+                  <path d="M5 15v4h4" />
+                  <path d="M19 15v4h-4" />
+                </svg>
+              </button>
+            </div>
+
+            {/* プレビュー本体（全画面） */}
+            <div className="mt-3 flex-1 overflow-auto rounded-xl border border-gray-300 bg-white px-4 py-3">
+              {/* ヘッダー（プレビュー用） */}
+              <div className="mb-4 rounded-xl border border-slate-200 bg-slate-950 px-4 py-3 text-slate-50">
+                <div className="flex items-baseline justify-between">
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-fuchsia-300">
+                      co-study platform
+                    </p>
+                    <p className="text-sm font-bold tracking-wide">
+                      高専から編入せよ！
+                    </p>
+                  </div>
+                  <span className="text-[10px] text-slate-300">
+                    解説プレビュー（全画面）
+                  </span>
+                </div>
+              </div>
+
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                rehypePlugins={[rehypeRaw]}
+                components={markdownComponents}
+              >
+                {transformed}
+              </ReactMarkdown>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

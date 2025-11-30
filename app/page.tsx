@@ -540,7 +540,12 @@ export default function HomePage() {
       <section className="border-b border-slate-800 bg-slate-950">
         <div className="mx-auto max-w-5xl px-4 py-12 md:py-16">
           <h2 className="text-lg font-semibold text-slate-50 md:text-xl">
-            高専から編入までを、「解説」でつなぐ。
+            高専から編入までを、
+          <span className="bg-gradient-to-r from-fuchsia-400 to-cyan-300 bg-clip-text text-transparent">
+            「解説」
+          </span>
+
+          でつなぐ。        
           </h2>
           <p className="mt-3 max-w-3xl text-sm text-slate-300 md:text-base">
             「高専から編入せよ！」は、高専生のための{" "}
