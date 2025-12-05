@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 高専から編入せよ！ - transfer-kosen
+**co-peering（協働学習）を軸に、編入合格まで最速で到達するための学習プラットフォーム**
 
-## Getting Started
+高専生が自分で作った「解説付き問題」を投稿し、互いに添削し合うことで  
+“説明できる理解” を鍛えるサービスです。  
+後輩の高専生にはもっと勉強しやすい環境と知識を継承してあげたい！
+数学・物理・情報などの編入科目に特化し、知識を資産にして継承する最強の協働学習空間を目指します。
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ✨ 主な機能
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 🔹 **問題一覧（Flex UI）**
+- 完成版問題を一覧で表示  
+- タグ（数学／物理／中級レベルなど）でフィルタ可能  
+- スタイリッシュなカード UI
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 🔹 **問題詳細ページ（Markdown + ホワイトボードUI）**
+- Markdown で綺麗に書ける解説  
+- 問題画像・狙い・解説者/共同編集者  
+- コメント、ビュー数、ハートボタン（予定）
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 🔹 **co-peer（コピア）制度**
+- 投稿数 × 品質でランクアップ  
+- 「見習い」「ベテラン」「公式」「テクノコピア」など  
+- 高専名・所属・大学進学先もタグ化して見える化
 
-## Learn More
+### 🔹 **ダッシュボード**
+- 自分の投稿・編集状況を一元管理  
+- 問題投稿フォーム  
+- 編集リクエスト（議論）画面
 
-To learn more about Next.js, take a look at the following resources:
+### 🔹 **講師/上位者レビュー（テクノコピアモード）**
+- 添削待ちの問題一覧  
+- コメント、レビュー、修正反映
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 🔹 **管理者ページ（運営）**
+- 例：ユーザー管理、タグ管理、ログ／分析
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🧱 使用技術
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Next.js 14 (App Router)**
+- **React / TypeScript**
+- **Tailwind CSS**
+- **Prisma / PlanetScale（予定）**
+- **Supabase Auth（予定）**
+- **Vercel / GitHub Actions（予定）**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 📁 プロジェクト構成（README 用の簡易版）
+
+> ※ 実際は非常に大規模なので、ここでは“開発者が最初に把握すべき大枠”のみを掲載しています。  
+> 詳細は `/docs/architecture` に分離予定。
+
+```txt
+transfer-kosen/
+├── app/               # Next.js ページ構成（public / dashboard / teacher / admin / auth）
+├── src/
+│   ├── server/        # DB, repository, service, 認証ロジック
+│   ├── client/        # UIロジック（features: problems, review, users, etc）
+│   ├── shared/        # 共通のコンポーネント、設定、型定義
+│   └── fixtures/      # 一時データ
+├── public/            # 静的ファイル（画像・テンプレート）
+├── prisma/            # Prisma schema & migrations
+├── tests/             # テストコード
+└── package.json
+
+
